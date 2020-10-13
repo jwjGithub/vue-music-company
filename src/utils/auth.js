@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'vue_music_admin_token'
+const TokenKey = 'vue_music_company_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
