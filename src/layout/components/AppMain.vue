@@ -1,3 +1,10 @@
+<!--
+ * @Description:内容部分
+ * @Autor: JWJ
+ * @Date: 2020-10-14 22:52:10
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-18 23:29:33
+-->
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">

@@ -34,12 +34,12 @@
     }
 
     .el-scrollbar {
-      height: 100%;
+      height: calc(100% - 80px);
     }
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 50px);
+        height: calc(100% - 80px);
       }
     }
 
@@ -83,7 +83,7 @@
     & .nest-menu .el-submenu>.el-submenu__title,
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
-      background-color: $subMenuBg !important;
+      background-color: $menuBg !important;
 
       &:hover {
         background-color: $subMenuHover !important;

@@ -1,3 +1,10 @@
+<!--
+ * @Description:头部导航栏路由地址展示
+ * @Autor: PXJ
+ * @Date: 2020-10-14 22:52:10
+ * @LastEditors: PXJ
+ * @LastEditTime: 2020-10-18 22:59:22
+-->
 <template>
   <el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
     <transition-group name="breadcrumb">

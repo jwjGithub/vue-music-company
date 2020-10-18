@@ -1,18 +1,19 @@
 <!--
- * @Description:头部导航栏
- * @Autor: PXJ
+ * @Description:
+ * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
- * @LastEditors: PXJ
- * @LastEditTime: 2020-10-18 16:46:11
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-18 23:17:27
 -->
 <template>
   <div class="navbar layout-navbar-page">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
 
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
       <div class="right-menu-input">
-        <el-input v-model="song" placeholder="歌曲/歌单/音乐人"><i slot="suffix" class="el-icon-search"></i></el-input>
+        <el-input v-model="song" placeholder="歌曲/歌单/音乐人"></el-input>
+        <img src="@/assets/images/common/search.png" alt="">
       </div>
       <div>
         <img class="right-menu-img" src="@/assets/images/common/default-head.png" alt="">
@@ -20,11 +21,6 @@
       <div class="right-user">
         <div>用户名</div>
         <el-dropdown class="avatar-container" trigger="click">
-          <!-- <div class="avatar-wrapper">
-            超级管理员 -->
-          <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
-          <!-- <i class="el-icon-caret-bottom" />
-          </div> -->
           <span class="avatar-wrapper">
             超级管理员
             <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
@@ -49,12 +45,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
+// import Hamburger from '@/components/Hamburger'
 
 export default {
   components: {
-    Breadcrumb,
-    Hamburger
+    Breadcrumb
+    // Hamburger
   },
   data() {
     return {
@@ -68,9 +64,10 @@ export default {
     ])
   },
   methods: {
-    toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
-    },
+    // 是否展开左边导航栏
+    // toggleSideBar() {
+    //   this.$store.dispatch('app/toggleSideBar')
+    // },
     async logout() {
       this.$confirm('确定注销并退出系统吗？', '提示', {
         confirmButtonText: '确定',
@@ -124,6 +121,15 @@ export default {
     .right-menu-input{
       margin-right: 30px;
       line-height: 80px;
+      position: relative;
+      .el-input{
+        width: 360px;
+      }
+      img{
+        position: absolute;
+        top: 28px;
+        right: 23px;
+      }
     }
     .right-menu-img{
       margin-top: 13px;
@@ -185,18 +191,34 @@ export default {
       border-radius: 30px;
     }
   }
-  .el-breadcrumb__inner{
-    color: #FFFFFF;
-    a {
+  .el-breadcrumb__item{
+    .el-breadcrumb__inner{
       color: #FFFFFF;
-    }
-  }
-  .app-breadcrumb{
-    .el-breadcrumb{
-      .no-redirect{
+      a {
         color: #FFFFFF;
       }
     }
+    .el-breadcrumb__separator{
+      color: #FFFFFF;
+    }
+  }
+  .el-breadcrumb__item:last-child{
+    .el-breadcrumb__inner{
+      color: #FFFFFF;
+    }
+    .no-redirect{
+        color: #FFFFFF;
+      }
+  }
+  .el-dropdown{
+    color: #FFFFFF;
+  }
+  .el-input__inner{
+    background-color: #afd8ff;
+    border: 1px solid #afd8ff;
+  }
+  .el-input__inner::placeholder {
+    color: #65a3dd;
   }
 }
 </style>

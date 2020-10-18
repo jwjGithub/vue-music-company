@@ -1,6 +1,14 @@
+<!--
+ * @Description:左侧导航栏
+ * @Autor: JWJ
+ * @Date: 2020-10-14 22:52:10
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-18 23:19:38
+-->
 <template>
   <div :class="{'has-logo':showLogo}">
-    <logo v-if="showLogo" :collapse="isCollapse" />
+    <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
+    <logo :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
