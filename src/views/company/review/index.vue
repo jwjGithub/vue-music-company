@@ -15,6 +15,11 @@
                 <span>搜索</span>
               </el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="openDialog">
+                <span>弹框</span>
+              </el-button>
+            </el-form-item>
           </div>
         </div>
       </el-form>
@@ -166,6 +171,9 @@
         </el-form>
       </div>
     </mus-dialog>
+    <div v-show="false" ref="dialogTTT" class="" style="color:red">
+      这是一个弹框
+    </div>
   </div>
 </template>
 <script>
@@ -252,6 +260,14 @@ export default {
     this.getDataList()
   },
   methods: {
+    openDialog() {
+      console.log(this.$refs['dialogTTT'])
+      this.$notify({
+        title: 'HTML 片段',
+        dangerouslyUseHTMLString: true,
+        message: this.$refs['dialogTTT']
+      })
+    },
     handleClick(tab, event) {
       if (this.activeName === 'dsh') {
         this.queryForm.status = '2'
