@@ -1,3 +1,10 @@
+/*
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-19 19:56:50
+ * @FilePath: \vue-music-company\src\api\user.js
+ */
 import request from '@/utils/request'
 
 // 登录
@@ -17,11 +24,11 @@ export function getRouterList() {
   })
 }
 
-export function getInfo(token) {
+// 通过token获取用户信息
+export function getInfo() {
   return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
+    url: '/sys/user/info',
+    method: 'get'
   })
 }
 

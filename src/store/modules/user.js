@@ -1,3 +1,10 @@
+/*
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-19 19:58:54
+ * @FilePath: \vue-music-company\src\store\modules\user.js
+ */
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
@@ -5,16 +12,19 @@ import { resetRouter } from '@/router'
 const getDefaultState = () => {
   return {
     token: getToken(),
+    userInfo: {}, // 用户信息
     name: '',
     avatar: ''
   }
 }
-
 const state = getDefaultState()
 
 const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
+  },
+  SET_USERINFO: (state, userInfo) => {
+    state.userInfo = userInfo
   },
   SET_TOKEN: (state, token) => {
     state.token = token
@@ -42,20 +52,17 @@ const actions = {
       })
     })
   },
-
-  // get user info
-  getInfo({ commit, state }) {
+  // 获取用户信息
+  GetInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token || getToken()).then(response => {
-        const { data } = response
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+      getInfo().then(res => {
+        console.log(res, 'res')
+        console.log(getToken(), 'ttt')
+        const { data } = res
+        commit('SET_NAME', data.realname)
+        commit('SET_USERINFO', data)
+        commit('SET_TOKEN', getToken())
+        // setToken(data.token)
         resolve(data)
       }).catch(error => {
         reject(error)
