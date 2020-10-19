@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-19 20:08:51
+ * @LastEditTime: 2020-10-19 20:17:02
  * @FilePath: \vue-music-company\src\permission.js
  */
 import router from './router'
@@ -27,7 +27,14 @@ router.beforeEach(async(to, from, next) => {
   if (getToken()) {
     if (!store.getters.name) {
       store.dispatch('user/GetInfo').then(res => {
-        next()
+
+      })
+    }
+    // 判断当前是否已经添加路由
+    if (store.getters.permission_routes.length === 0) {
+      store.dispatch('GenerateRoutes').then(accessRoutes => {
+        router.addRoutes(accessRoutes) // 动态添加可访问路由表
+        next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
       })
     } else {
       next()

@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-19 20:05:43
+ * @LastEditTime: 2020-10-19 20:33:02
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -30,7 +30,27 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '/test',
+    component: Layout,
+    redirect: '/test/test1',
+    meta: { title: '测试页面', icon: 'tree' },
+    children: [
+      {
+        path: 'test1',
+        name: 'Test1',
+        component: () => import('@/views/test'),
+        meta: { title: 'TEST1', icon: 'table' }
+      },
+      {
+        path: 'test2',
+        name: 'Test2',
+        component: () => import('@/views/test'),
+        meta: { title: 'TEST2', icon: 'table' }
+      }
+    ]
+  }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

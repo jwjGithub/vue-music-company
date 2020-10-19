@@ -1,3 +1,10 @@
+/*
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-19 20:16:36
+ * @FilePath: \vue-music-company\src\store\modules\permission.js
+ */
 import { constantRoutes } from '@/router'
 import { getRouterList } from '@/api/user'
 import Layout from '@/layout/index'
@@ -18,12 +25,16 @@ const permission = {
     GenerateRoutes({ commit }) {
       return new Promise(resolve => {
         // 向后端请求路由数据
-        getRouterList().then(res => {
-          const accessedRoutes = filterAsyncRouter(res.data)
-          accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
-          commit('SET_ROUTES', accessedRoutes)
-          resolve(accessedRoutes)
-        })
+        const accessedRoutes = []
+        accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
+        // getRouterList().then(res => {
+        //   const accessedRoutes = filterAsyncRouter(res.data)
+        //   accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
+        //   commit('SET_ROUTES', accessedRoutes)
+        //   resolve(accessedRoutes)
+        // })
       })
     }
   }
