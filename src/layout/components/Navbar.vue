@@ -85,7 +85,7 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 80px;
+  height: 70px;
   overflow: hidden;
   position: relative;
   color:#FFFFFF;
@@ -93,7 +93,7 @@ export default {
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
-    line-height: 80px;
+    line-height: 70px;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -120,19 +120,19 @@ export default {
     }
     .right-menu-input{
       margin-right: 30px;
-      line-height: 80px;
+      line-height: 70px;
       position: relative;
       .el-input{
         width: 360px;
       }
       img{
         position: absolute;
-        top: 28px;
+        top: 24px;
         right: 23px;
       }
     }
     .right-menu-img{
-      margin-top: 13px;
+      margin-top: 8px;
       margin-right: 10px;
     }
     .right-user{
