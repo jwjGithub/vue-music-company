@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-19 20:33:02
+ * @LastEditTime: 2020-10-21 17:51:44
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -31,6 +31,26 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/songCollection',
+    component: Layout,
+    redirect: '/songCollection/optionalLibrary',
+    meta: { title: '收歌管理', icon: 'tree' },
+    children: [
+      {
+        path: 'optionalLibrary',
+        name: 'songCollectionOptionalLibrary',
+        component: () => import('@/views/songCollection/optionalLibrary/index'),
+        meta: { title: '自选库' }
+      },
+      {
+        path: 'test2',
+        name: 'Test2',
+        component: () => import('@/views/test'),
+        meta: { title: 'TEST2' }
+      }
+    ]
+  },
+  {
     path: '/test',
     component: Layout,
     redirect: '/test/test1',
@@ -40,13 +60,13 @@ export const constantRoutes = [
         path: 'test1',
         name: 'Test1',
         component: () => import('@/views/test'),
-        meta: { title: 'TEST1', icon: 'table' }
+        meta: { title: 'TEST1' }
       },
       {
         path: 'test2',
         name: 'Test2',
         component: () => import('@/views/test'),
-        meta: { title: 'TEST2', icon: 'table' }
+        meta: { title: 'TEST2' }
       }
     ]
   }

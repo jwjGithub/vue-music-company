@@ -2,8 +2,8 @@
  * @Description:头部导航栏路由地址展示
  * @Autor: PXJ
  * @Date: 2020-10-14 22:52:10
- * @LastEditors: PXJ
- * @LastEditTime: 2020-10-18 22:59:22
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-21 14:14:27
 -->
 <template>
   <el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
@@ -74,7 +74,7 @@ export default {
 .app-breadcrumb.el-breadcrumb {
   display: inline-block;
   font-size: 14px;
-  line-height: 80px;
+  line-height: 70px;
   margin-left: 8px;
 
   .no-redirect {

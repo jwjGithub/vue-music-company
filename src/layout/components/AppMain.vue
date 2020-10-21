@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-18 23:29:33
+ * @LastEditTime: 2020-10-21 14:21:27
 -->
 <template>
   <section class="app-main">
@@ -27,13 +27,14 @@ export default {
 <style scoped>
 .app-main {
   /*50 = navbar  */
-  height: calc(100vh - 80px);
+  height: calc(100vh - 70px);
   width: 100%;
   position: relative;
   overflow: hidden;
+  background-color:#e7EDF5;
 }
 .fixed-header+.app-main {
-  padding-top: 80px;
+  padding-top: 70px;
 }
 </style>
 
