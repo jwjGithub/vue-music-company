@@ -2,7 +2,7 @@
  * @Date: 2020-10-21 17:49:06
  * @Description: 自选库
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-21 17:49:32
+ * @LastEditTime: 2020-10-22 20:51:27
  * @FilePath: \vue-music-company\src\views\songCollection\optionalLibrary\index.vue
 -->
 <template>
@@ -19,12 +19,13 @@
         </el-tab-pane>
         <el-tab-pane
           v-for="(item, index) in tabList"
-          :key="item.name"
+          :key="index"
           :label="item.title"
           :name="item.name"
           :closable="true"
         >
-          {{ item.content }} -- {{ index }}
+          <!-- {{ item.content }} -- {{ index }} -->
+          <Details :id="item.id"></Details>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -36,10 +37,12 @@ import {
   getList
 } from '@/api/songCollection/optionalLibrary'
 import List from './components/List'
+import Details from './components/Details'
 export default {
   name: '',
   components: {
-    'list': List
+    'list': List,
+    Details
   },
   data() {
     return {

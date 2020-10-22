@@ -101,7 +101,7 @@ import {
   saveEdit,
   saveDelete,
   getUserUnderCom
-} from '@/api/songCollection/optionalLibrary'
+} from '@/api/songCollection/optionalLibrary/list'
 export default {
   name: 'List',
   components: {
