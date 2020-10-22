@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-21 17:51:44
+ * @LastEditTime: 2020-10-22 09:19:01
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'

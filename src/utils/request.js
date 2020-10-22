@@ -1,3 +1,10 @@
+/*
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-22 16:04:06
+ * @FilePath: \vue-music-company\src\utils\request.js
+ */
 import axios from 'axios'
 // import router from '@/router'
 import { Notification, MessageBox, Message } from 'element-ui'
@@ -17,6 +24,15 @@ service.interceptors.request.use(
   config => {
     if (getToken()) {
       config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      // 过滤分页数字
+      if (config.data) {
+        if (config.data.page) {
+          config.data.page = config.data.page.toString()
+        }
+        if (config.data.limit) {
+          config.data.limit = config.data.limit.toString()
+        }
+      }
       return config
     } else {
       let url = window.location.href
