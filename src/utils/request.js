@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-22 16:04:06
+ * @LastEditTime: 2020-10-26 21:51:28
  * @FilePath: \vue-music-company\src\utils\request.js
  */
 import axios from 'axios'
@@ -26,12 +26,14 @@ service.interceptors.request.use(
       config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
       // 过滤分页数字
       if (config.data) {
-        if (config.data.page) {
-          config.data.page = config.data.page.toString()
+        let data = JSON.parse(JSON.stringify(config.data))
+        if (data.page) {
+          data.page = data.page.toString()
         }
-        if (config.data.limit) {
-          config.data.limit = config.data.limit.toString()
+        if (data.limit) {
+          data.limit = data.limit.toString()
         }
+        config.data = data
       }
       return config
     } else {

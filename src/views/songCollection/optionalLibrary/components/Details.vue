@@ -7,14 +7,17 @@
             <div class="tag mr10"></div>
             <div class="title">自选库内存歌曲</div>
           </div>
-          <div class="right pr30">
+          <div class="center">
             <el-input v-model="queryForm.keyword" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
-            <el-button type="primary" size="mini" class="ml10 mrx45" :loading="loading" @click="getList">查询</el-button>
-            <el-button size="mini" @click="deleteMusic">移动</el-button>
-            <el-button size="mini" class="ml20" @click="deleteMusic">复制</el-button>
-            <el-button size="mini" class="ml20" @click="deleteMusic">删除</el-button>
-            <el-button size="mini" class="ml20" @click="deleteMusic">共享</el-button>
-            <el-button size="mini" class="ml20" @click="deleteMusic">下载</el-button>
+            <el-button type="primary" size="mini" class="ml10 mr20" :loading="loading" @click="getList">查询</el-button>
+          </div>
+          <div class="right pr30">
+            <el-button type="primary" size="mini" :disabled="selectOption.multiple" @click="$message.error('暂时没接口')">播放</el-button>
+            <el-button size="mini" :disabled="selectOption.multiple" @click="openDialogOption(1)">移动</el-button>
+            <el-button size="mini" class="ml20" :disabled="selectOption.multiple" @click="openDialogOption(2)">复制</el-button>
+            <el-button size="mini" class="ml20" :disabled="selectOption.multiple" @click="openDelete(2,null)">删除</el-button>
+            <el-button size="mini" class="ml20" @click="$message.error('暂时没接口')">共享</el-button>
+            <el-button size="mini" class="ml20" @click="$message.error('暂时没接口')">下载</el-button>
           </div>
         </div>
         <div class="content">
@@ -38,6 +41,13 @@
 							</template>
 							</el-table-column> -->
             </el-table>
+            <pagination
+              v-show="total>0"
+              :total="Number(total)"
+              :page.sync="queryForm.page"
+              :limit.sync="queryForm.limit"
+              @pagination="getList"
+            />
           </el-scrollbar>
         </div>
       </div>
@@ -48,63 +58,132 @@
         <div class="content">
           <p class="row">
             <span class="row-title">创建人：</span>
-            <span class="row-text">蒋文俊</span>
+            <span class="row-text">{{ form.realname }}</span>
           </p>
           <p class="row">
             <span class="row-title">创建时间：</span>
-            <span class="row-text">2020-12-12 12:12:12</span>
+            <span class="row-text">{{ form.createdTime }}</span>
           </p>
           <p class="row">
             <span class="row-title">最后修改时间：</span>
-            <span class="row-text">2020-12-12 12:12:12</span>
+            <span class="row-text">{{ form.updateTime }}</span>
+          </p>
+          <p class="row">
+            <span class="row-title">分享人：</span>
+            <span class="row-text">{{ form.sharingPersonNames }}</span>
           </p>
           <p class="row">
             <span class="row-title">备注：</span>
-            <span class="row-text">2020-12-12 12:12:12备注备注备注备注备注备注备注备注备注</span>
+            <span class="row-text">{{ form.remark }}</span>
           </p>
         </div>
       </div>
     </div>
+    <!-- 新增/修改 弹窗 -->
+    <mus-dialog
+      :title="dialogOption.title"
+      :loading="dialogOption.loading"
+      :is-show="dialogOption.show"
+      :width="'460px'"
+      @handleClose="dialogOption.show = false"
+      @handleConfirm="handleConfirm"
+    >
+      <div class="pl24 pr24 pt24 pb24">
+        <el-form ref="listForm" :model="listForm" :rules="rules" label-width="130px">
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="目标自选库：" prop="toOptionalId">
+                <el-select
+                  v-model="listForm.toOptionalId"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                  style="width:100%;"
+                >
+                  <el-option v-for="item in zxkList" :key="item.id" :label="item.baseName" :value="item.id" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+        </el-form>
+      </div>
+    </mus-dialog>
   </div>
 </template>
 <script>
 import {
   getList,
-  deleteMusic
+  getOptionalList,
+  copyToOptional,
+  moveToOptional,
+  saveDelete
 } from '@/api/songCollection/optionalLibrary/details'
 export default {
   name: 'Details',
   components: {
   },
   props: {
-    id: {
-      type: [String, Number],
-      default: ''
+    form: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {
     return {
+      // 选择对象
+      selectOption: {
+        // 选中数组
+        ids: [],
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true
+      },
       total: 0,
       loading: false,
       dataList: [],
+      zxkList: [], // 自选库列表
       userList: [], // 用户列表
       queryForm: {
         opBaseId: '', // 自选库详情id
         keyword: '', // 关键字
         page: 1, // 当前页
-        limit: 10 // 每页条数
+        limit: 20 // 每页条数
       },
-      selectOption: []// 列表多选选中对象
+      dialogOption: {
+        title: '',
+        show: false,
+        loading: false
+      },
+      listForm: {
+        toOptionalId: ''
+      },
+      rules: {
+        toOptionalId: [
+          { required: true, message: '请选择目标自选库', trigger: ['blur'] }
+        ]
+      }
     }
   },
   created() {
+    this.getOptionalList()
     this.getList()
   },
   methods: {
+    // 查询自选库列表下拉
+    getOptionalList() {
+      getOptionalList({ baseName: '' }).then(res => {
+        this.zxkList = res.data || []
+      })
+    },
     // 查询列表
     getList() {
       this.loading = true
-      this.queryForm.opBaseId = this.id
+      console.log(this.form, '11')
+      this.queryForm.opBaseId = this.form.id
       getList(this.queryForm).then(res => {
         this.dataList = res.data || []
         this.total = res.count || 0
@@ -115,7 +194,82 @@ export default {
     },
     // 列表多选框
     handleSelectionChange(selection) {
-      this.selectOption = selection
+      this.selectOption.ids = selection.map(item => item.id)
+      this.selectOption.single = selection.length !== 1
+      this.selectOption.multiple = !selection.length
+    },
+    // 打开删除 type:1 单个 type:2 批量
+    openDelete(type, row) {
+      let title = type === 1 ? '单个' : '批量'
+      this.$confirm('此操作将' + title + '删除自选库歌曲, 是否继续?', '自选库歌曲删除', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning'
+      }).then(() => {
+        let json = {
+          optionalId: this.form.id,
+          musicIds: type === 1 ? row.id : this.selectOption.ids.join(',')
+        }
+        console.log('删除')
+        saveDelete(json).then(res => {
+          this.$notify.success({
+            title: '操作成功'
+          })
+          this.getList()
+        })
+      }).catch(() => {
+
+      })
+    },
+    // type 1:移动 2:复制
+    openDialogOption(type) {
+      let title = type === 1 ? '移动到' : '复制到'
+      this.listForm = {
+        type: type,
+        fromOptionalId: this.form.id,
+        toOptionalId: '',
+        musicIds: this.selectOption.ids.join(',')
+      }
+      this.dialogOption = {
+        title: title,
+        show: true,
+        loading: false
+      }
+      this.resetForm('listForm')
+    },
+    // 保存回调
+    handleConfirm() {
+      this.$refs['listForm'].validate((valid) => {
+        if (valid) {
+          if (this.listForm.type === 1) {
+            this.dialogOption.loading = true
+            moveToOptional(this.listForm).then(res => {
+              this.$notify.success({
+                title: '操作成功'
+              })
+              this.dialogOption.show = false
+              this.dialogOption.loading = false
+              this.getList()
+            }).catch(() => {
+              this.dialogOption.loading = false
+            })
+          } else {
+            this.dialogOption.loading = true
+            copyToOptional(this.listForm).then(res => {
+              this.$notify.success({
+                title: '操作成功'
+              })
+              this.dialogOption.show = false
+              this.dialogOption.loading = false
+              this.getList()
+            }).catch(() => {
+              this.dialogOption.loading = false
+            })
+          }
+        } else {
+          return false
+        }
+      })
     },
     // 删除歌曲
     deleteMusic() {
@@ -145,27 +299,31 @@ export default {
 				align-items:center;
 				justify-content:space-between;
 				>.left{
-				padding-left:20px;
-				display: flex;
-				align-items:center;
-				>.tag{
-					width: 4px;
-					height: 24px;
-					background: #65a3dd;
+          padding-left:20px;
+          display: flex;
+          align-items:center;
+          >.tag{
+            width: 4px;
+            height: 24px;
+            background: #65a3dd;
+          }
+          >.title{
+            font-size: 20px;
+            color: #65a3dd;
+          }
 				}
-				>.title{
-					font-size: 20px;
-					color: #65a3dd;
-				}
-				}
+        >.center{
+          display: flex;
+          align-items:center;
+        }
 				>.right{
-				display: flex;
-				align-items:center;
-				.search-input{
-					::v-deep .el-input__inner{
-						background-color:#f8f8f8;
-					}
-				}
+          display: flex;
+          align-items:center;
+          .search-input{
+            ::v-deep .el-input__inner{
+              background-color:#f8f8f8;
+            }
+          }
 				}
 			}
 			>.content{
@@ -191,6 +349,7 @@ export default {
 				>.row{
 					display: flex;
 					font-size: 14px;
+          align-items:center;
 					.row-title{
 						width: 120px;
 						text-align: right;

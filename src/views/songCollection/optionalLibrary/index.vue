@@ -2,7 +2,7 @@
  * @Date: 2020-10-21 17:49:06
  * @Description: 自选库
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-22 20:51:27
+ * @LastEditTime: 2020-10-26 21:59:36
  * @FilePath: \vue-music-company\src\views\songCollection\optionalLibrary\index.vue
 -->
 <template>
@@ -14,7 +14,7 @@
         type="border-card"
         @tab-remove="removeTab"
       >
-        <el-tab-pane label="用户管理" name="index">
+        <el-tab-pane label="自选库列表" name="index">
           <list @addTab="addTab"></list>
         </el-tab-pane>
         <el-tab-pane
@@ -24,8 +24,7 @@
           :name="item.name"
           :closable="true"
         >
-          <!-- {{ item.content }} -- {{ index }} -->
-          <Details :id="item.id"></Details>
+          <Details :form="item.form"></Details>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -47,19 +46,7 @@ export default {
   data() {
     return {
       tabActiveName: 'index',
-      tabList: [
-        // {
-        //   title: '详情1',
-        //   name: '1',
-        //   content: 'Tab 1 content'
-        // },
-        // {
-        //   title: '详情2',
-        //   name: '2',
-        //   content: 'Tab 2 content'
-        // }
-      ],
-      tabIndex: 0,
+      tabList: [],
       total: 0,
       loading: false,
       dataList: [],
@@ -74,15 +61,24 @@ export default {
   },
   methods: {
     addTab(row) {
-      this.tabIndex += 1
-      let newTabName = this.tabIndex + ''
-      this.tabList.push({
-        title: row.title + this.tabIndex,
-        id: row.id,
-        name: newTabName,
-        content: '详情页面' + this.tabIndex
-      })
-      this.tabActiveName = newTabName
+      let newTabName = row.title + row.form.id
+      let bl = true
+      for (let i = 0, len = this.tabList.length; i < len; i++) {
+        let item = this.tabList[i]
+        if (item.name === newTabName) {
+          this.tabActiveName = newTabName
+          bl = false
+          break
+        }
+      }
+      if (bl) {
+        this.tabList.push({
+          title: row.title,
+          form: row.form,
+          name: newTabName
+        })
+        this.tabActiveName = newTabName
+      }
     },
     removeTab(name) {
       for (let i = 0, len = this.tabList.length; i < len; i++) {

@@ -38,6 +38,13 @@
               </template>
             </el-table-column> -->
           </el-table>
+          <pagination
+            v-show="total>0"
+            :total="Number(total)"
+            :page.sync="queryForm.page"
+            :limit.sync="queryForm.limit"
+            @pagination="getList"
+          />
         </el-scrollbar>
       </div>
     </div>
@@ -124,7 +131,7 @@ export default {
       queryForm: {
         baseName: '', // 自选库名称
         page: 1, // 当前页
-        limit: 10 // 每页条数
+        limit: 20 // 每页条数
       },
       // 默认弹窗对象
       dialogOption: {
@@ -155,6 +162,7 @@ export default {
     getList() {
       this.loading = true
       getList(this.queryForm).then(res => {
+        console.log(this.queryForm)
         this.dataList = res.data || []
         this.total = res.count || 0
         this.loading = false
@@ -259,9 +267,18 @@ export default {
     },
     // 打开详情
     openDetails(row) {
+      let form = {
+        id: row.id,
+        realname: row.user && row.user.realname,
+        createdTime: row.createdTime,
+        updateTime: row.updateTime,
+        sharingPersonNames: row.sharingPersonNames,
+        remark: row.remark
+      }
+      console.log(form, 'form')
       let json = {
         title: row.baseName + '-详情',
-        id: row.id
+        form: form
       }
       this.$emit('addTab', json)
     }
