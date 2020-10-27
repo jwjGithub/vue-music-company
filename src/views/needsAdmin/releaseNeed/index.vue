@@ -15,27 +15,29 @@
         </div>
       </div>
       <div class="content">
-        <div class="top">
-          <el-form ref="form" :model="form" label-width="130px" label-position="top" size="mini">
+        <div v-if="showAndHide === 1" class="top">
+          <el-form ref="form" class="label-position-top" :model="form" label-width="130px" label-position="top" size="mini">
             <el-row></el-row>
             <el-form-item label="请输入标题" prop="title">
               <el-input v-model="form.title" style="width:100%;"></el-input>
             </el-form-item>
-            <el-form-item label="请输入需求详情" prop="content">
-              <el-input v-model="form.content" type="textarea" :rows="4" placeholder="请输入" :resize="'none'" style="width:100%;"></el-input>
+            <el-form-item label="请输入需求详情" prop="content" style="min-height:300px;">
+              <Editor v-model="form.content" style="width:100%;" />
+              <!-- <el-input v-model="form.content" type="textarea" :rows="4" placeholder="请输入" :resize="'none'" style="width:100%;"></el-input> -->
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="addNeed('ruleForm')">发布</el-button>
             </el-form-item>
           </el-form>
         </div>
-        <div class="footer">
+        <div v-else class="footer">
           <div class="footer-img">
             <img src="@/assets/images/needsAdmin/icon_success.png">
           </div>
-          <div>
-            <el-button size="mini" @click="intoNeeds">进入需求库</el-button>
-            <el-button size="mini" @click="intoNeeds">再来一条</el-button>
+          <div class="footer-btn mt50">
+            <div>恭喜发布成功！</div>
+            <el-button size="mini" class="mt60" @click="intoNeeds">进入需求库</el-button>
+            <el-button size="mini" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
           </div>
         </div>
       </div>
@@ -47,9 +49,12 @@
 import {
   addNeed
 } from '@/api/needsAdmin/releaseNeed'
+import Editor from '@/components/Editor'
 export default {
   name: '',
-  components: {},
+  components: {
+    Editor
+  },
   data() {
     return {
       tabList: [],
@@ -64,7 +69,8 @@ export default {
       form: {
         title: '', // 需求标题
         content: ''// 需求内容
-      }
+      },
+      showAndHide: 1
     }
   },
   created() {
@@ -73,6 +79,9 @@ export default {
     // 发布需求
     addNeed(formName) {
       addNeed(this.form).then(res => {
+        if (res.msg === 'success') {
+          this.showAndHide = 2
+        }
         console.log(res, '发布需求')
       })
     },
@@ -121,7 +130,20 @@ export default {
 				min-width: 400px;
 				max-width: 1000px;
 				margin:0 auto;
-			}
+      }
+      >.footer{
+        width: 100%;
+        >.footer-img{
+          width: 200px;
+          height: 200px;
+          margin: 0 auto;
+        }
+        >.footer-btn{
+          margin: 0 auto;
+          text-align: center;
+          font-size: 24px;
+        }
+      }
     }
   }
 }

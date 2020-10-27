@@ -126,6 +126,20 @@ input[type='number'] {
   }
 }
 
+// 从写表单样式
+.label-position-top{
+  &.el-form--label-top {
+    .el-form-item{
+      .el-form-item__label{
+        padding:0;
+      }
+    }
+  }
+  // .el-form--label-top .el-form-item__label{
+  //   padding:0;
+  // }
+}
+
 // // 重新输入框样式
 // .el-input--medium{
 //   font-size:12px;
