@@ -32,6 +32,9 @@
     >.el-scrollbar__bar.is-horizontal {
       display: none;
     }
+    .el-menu--collapse .el-menu .el-submenu {
+      min-width: $sideBarWidth !important;
+    }
     >.el-scrollbar {
       height:100%;
       // margin-top:20px;

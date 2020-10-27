@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-22 09:19:01
+ * @LastEditTime: 2020-10-27 22:05:49
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -67,6 +67,20 @@ export const constantRoutes = [
         name: 'Test2',
         component: () => import('@/views/test'),
         meta: { title: 'TEST2' }
+      }
+    ]
+  },
+  {
+    path: '/needsAdmin',
+    component: Layout,
+    redirect: '/needsAdmin/releaseNeed',
+    meta: { title: '需求管理', icon: 'tree' },
+    children: [
+      {
+        path: 'releaseNeed',
+        name: 'needsAdminReleaseNeed',
+        component: () => import('@/views/needsAdmin/releaseNeed/index'),
+        meta: { title: '发布需求' }
       }
     ]
   }
