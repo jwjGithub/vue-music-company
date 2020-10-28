@@ -14,10 +14,10 @@
           <div class="right pr30">
             <el-button type="primary" size="mini" :disabled="selectOption.multiple" @click="$message.error('暂时没接口')">播放</el-button>
             <el-button size="mini" :disabled="selectOption.multiple" @click="openDialogOption(1)">移动</el-button>
-            <el-button size="mini" class="ml20" :disabled="selectOption.multiple" @click="openDialogOption(2)">复制</el-button>
-            <el-button size="mini" class="ml20" :disabled="selectOption.multiple" @click="openDelete(2,null)">删除</el-button>
-            <el-button size="mini" class="ml20" @click="$message.error('暂时没接口')">共享</el-button>
-            <el-button size="mini" class="ml20" @click="$message.error('暂时没接口')">下载</el-button>
+            <el-button size="mini" class="ml10" :disabled="selectOption.multiple" @click="openDialogOption(2)">复制</el-button>
+            <el-button size="mini" class="ml10" :disabled="selectOption.multiple" @click="openDelete(2,null)">删除</el-button>
+            <el-button size="mini" class="ml10" @click="$message.error('暂时没接口')">共享</el-button>
+            <el-button size="mini" class="ml10" @click="$message.error('暂时没接口')">下载</el-button>
           </div>
         </div>
         <div class="content">

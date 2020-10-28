@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-27 23:20:26
+ * @LastEditTime: 2020-10-28 22:05:53
 -->
 <template>
   <div class="main-page needsAdmin-releaseNeed">
@@ -16,7 +16,7 @@
       </div>
       <div class="content">
         <div v-if="showAndHide === 1" class="top">
-          <el-form ref="form" class="label-position-top" :model="form" label-width="130px" label-position="top" size="mini">
+          <el-form ref="form" class="label-position-top" :model="form" :rules="rules" label-width="130px" label-position="top" size="mini">
             <el-row></el-row>
             <el-form-item label="请输入标题" prop="title">
               <el-input v-model="form.title" style="width:100%;"></el-input>
@@ -25,19 +25,19 @@
               <Editor v-model="form.content" style="width:100%;" />
               <!-- <el-input v-model="form.content" type="textarea" :rows="4" placeholder="请输入" :resize="'none'" style="width:100%;"></el-input> -->
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="addNeed('ruleForm')">发布</el-button>
+            <el-form-item class="text-center">
+              <el-button type="primary" size="medium" @click="addNeed">发布</el-button>
             </el-form-item>
           </el-form>
         </div>
         <div v-else class="footer">
-          <div class="footer-img">
+          <div class="footer-img mt50">
             <img src="@/assets/images/needsAdmin/icon_success.png">
           </div>
           <div class="footer-btn mt50">
-            <div>恭喜发布成功！</div>
-            <el-button size="mini" class="mt60" @click="intoNeeds">进入需求库</el-button>
-            <el-button size="mini" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
+            <div class="mb20">恭喜发布成功！</div>
+            <el-button type="primary" size="mini" class="mt60" @click="intoNeeds">进入需求库</el-button>
+            <el-button type="primary" size="mini" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
           </div>
         </div>
       </div>
@@ -70,6 +70,11 @@ export default {
         title: '', // 需求标题
         content: ''// 需求内容
       },
+      rules: {
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' }
+        ]
+      },
       showAndHide: 1
     }
   },
@@ -77,15 +82,28 @@ export default {
   },
   methods: {
     // 发布需求
-    addNeed(formName) {
-      addNeed(this.form).then(res => {
-        if (res.msg === 'success') {
-          this.showAndHide = 2
+    addNeed() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          addNeed(this.form).then(res => {
+            if (res.msg === 'success') {
+              this.showAndHide = 2
+            }
+            console.log(res, '发布需求')
+          })
+        } else {
+          return false
         }
-        console.log(res, '发布需求')
       })
     },
-    intoNeeds() {}
+    intoNeeds() {
+      this.showAndHide = 1
+      this.form = {
+        title: '', // 需求标题
+        content: ''// 需求内容
+      }
+      this.resetForm('form')
+    }
   }
 }
 </script>

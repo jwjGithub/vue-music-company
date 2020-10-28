@@ -1,8 +1,16 @@
+/*
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-28 21:45:58
+ * @FilePath: \vue-music-company\src\store\modules\app.js
+ */
 import Cookies from 'js-cookie'
 
 const state = {
   sidebar: {
-    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
+    opened: true,
+    // opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
   device: 'desktop'

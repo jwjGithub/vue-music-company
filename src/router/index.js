@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-27 22:05:49
+ * @LastEditTime: 2020-10-28 22:25:36
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -31,6 +31,26 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/account',
+    meta: { title: '公司管理', icon: 'tree' },
+    children: [
+      {
+        path: 'account',
+        name: 'AdminAccount',
+        component: () => import('@/views/admin/account/index'),
+        meta: { title: '管理员账号管理' }
+      },
+      {
+        path: 'info',
+        name: 'AdminInfo',
+        component: () => import('@/views/admin/info/index'),
+        meta: { title: '公司信息管理' }
+      }
+    ]
+  },
+  {
     path: '/songCollection',
     component: Layout,
     redirect: '/songCollection/optionalLibrary',
@@ -40,33 +60,7 @@ export const constantRoutes = [
         path: 'optionalLibrary',
         name: 'songCollectionOptionalLibrary',
         component: () => import('@/views/songCollection/optionalLibrary/index'),
-        meta: { title: '自选库' }
-      },
-      {
-        path: 'test2',
-        name: 'Test2',
-        component: () => import('@/views/test'),
-        meta: { title: 'TEST2' }
-      }
-    ]
-  },
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/test/test1',
-    meta: { title: '测试页面', icon: 'tree' },
-    children: [
-      {
-        path: 'test1',
-        name: 'Test1',
-        component: () => import('@/views/test'),
-        meta: { title: 'TEST1' }
-      },
-      {
-        path: 'test2',
-        name: 'Test2',
-        component: () => import('@/views/test'),
-        meta: { title: 'TEST2' }
+        meta: { title: '自选库管理' }
       }
     ]
   },

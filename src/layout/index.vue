@@ -1,3 +1,10 @@
+<!--
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-10-28 21:48:44
+ * @FilePath: \vue-music-company\src\layout\index.vue
+-->
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
@@ -13,7 +20,7 @@
 
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+// import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
@@ -22,7 +29,7 @@ export default {
     Sidebar,
     AppMain
   },
-  mixins: [ResizeMixin],
+  // mixins: [ResizeMixin],
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar

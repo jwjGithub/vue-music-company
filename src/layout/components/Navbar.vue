@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-18 23:17:27
+ * @LastEditTime: 2020-10-28 22:09:45
 -->
 <template>
   <div class="navbar layout-navbar-page">
@@ -19,10 +19,10 @@
         <img class="right-menu-img" src="@/assets/images/common/default-head.png" alt="">
       </div>
       <div class="right-user">
-        <div>用户名</div>
+        <div>{{ $store.getters.userInfo.username }}</div>
         <el-dropdown class="avatar-container" trigger="click">
           <span class="avatar-wrapper">
-            超级管理员
+            {{ $store.getters.userInfo.realname }}
             <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
