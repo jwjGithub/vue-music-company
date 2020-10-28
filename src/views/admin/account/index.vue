@@ -14,7 +14,51 @@
           <div class="title">管理员账号管理</div>
         </div>
       </div>
-      <div class="content">
+      <div class="content ptx28">
+        <div class="left">
+          <div class="left-img">
+            <img src="@/assets/images/admin/user_head.png">
+          </div>
+          <div class="left-title mt22">
+            <img src="@/assets/images/admin/icon_edit.png">
+            <span class="ml8">替换头像</span>
+          </div>
+        </div>
+        <div class="right mlx42">
+          <div class="row">
+            <p class="row-title">公司名称</p>
+            <p class="row-text">和回房间的撒谎近段时间</p>
+          </div>
+          <div class="row">
+            <p class="row-title">账号</p>
+            <p class="row-text">fdhfd</p>
+          </div>
+          <div class="row">
+            <p class="row-title">密码</p>
+            <p class="row-text">
+              <span class="mr12">*****</span>
+              <img src="@/assets/images/admin/icon_edit.png">
+            </p>
+          </div>
+          <div class="row">
+            <p class="row-title">手机</p>
+            <p class="row-text">
+              <span class="mr12">18224055666</span>
+              <img src="@/assets/images/admin/icon_edit.png">
+            </p>
+          </div>
+          <div class="row">
+            <p class="row-title">邮箱</p>
+            <p class="row-text">
+              <span class="mr12">12345787@qq.com</span>
+              <img src="@/assets/images/admin/icon_edit.png">
+            </p>
+          </div>
+          <div class="row">
+            <p class="row-title">注册日期</p>
+            <p class="row-text">2012-10-24</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -67,7 +111,6 @@ export default {
 		display:flex;
     flex-direction: column;
     >.header{
-      margin-bottom: 10px;
       height:60px;
       display:flex;
       align-items:center;
@@ -90,6 +133,33 @@ export default {
     >.content{
       flex:1;
 			overflow: hidden;
+      display: flex;
+      border-top: 4px solid #f7fbfe;
+      >.left{
+        width: 370px;
+        >.left-img{
+          width: 202px;
+          margin: 0 auto;
+          border: 1px solid #cccccc;
+        }
+        >.left-title{
+          text-align: center;
+        }
+      }
+      >.right{
+        >.row{
+          display: flex;
+          >.row-title{
+            width: 130px;
+            color: #999999;
+            font-size: 14px;
+          }
+          >.row-text{
+            color: #333333;
+            font-size: 14px;
+          }
+        }
+      }
     }
   }
 }
