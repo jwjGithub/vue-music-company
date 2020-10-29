@@ -27,44 +27,44 @@
         <div class="right mlx42">
           <div class="row">
             <p class="row-title">公司名称</p>
-            <p class="row-text">和回房间的撒谎近段时间</p>
+            <p class="row-text">{{ dataInfo.companyName }}</p>
           </div>
           <div class="row">
             <p class="row-title">注册日期</p>
-            <p class="row-text">2012-10-24</p>
+            <p class="row-text">{{ dataInfo.sysUserEntity && dataInfo.sysUserEntity.createTime }}</p>
           </div>
           <div class="row">
             <p class="row-title">公司性质</p>
             <p class="row-text">
-              <span class="mr12">公司性质</span>
+              <span class="mr12">{{ setCompanyType(dataInfo.companyType) }}</span>
               <img src="@/assets/images/admin/icon_edit.png">
             </p>
           </div>
           <div class="row">
             <p class="row-title">地址</p>
             <p class="row-text">
-              <span class="mr12">成都市华阳街道xxx号</span>
+              <span class="mr12">{{ dataInfo.address }}</span>
               <img src="@/assets/images/admin/icon_edit.png">
             </p>
           </div>
           <div class="row">
             <p class="row-title">简介</p>
             <p class="row-text">
-              <span class="mr12">公司简介公司简介公司简介公司简介</span>
+              <span class="mr12" v-html="dataInfo.introduction"></span>
               <img src="@/assets/images/admin/icon_edit.png">
             </p>
           </div>
           <div class="row">
             <p class="row-title">网址</p>
             <p class="row-text">
-              <span class="mr12">hhtp://www.157878.com</span>
+              <span class="mr12">{{ dataInfo.url }}</span>
               <img src="@/assets/images/admin/icon_edit.png">
             </p>
           </div>
           <div class="row">
             <p class="row-title">营业执照</p>
             <p class="row-text row-img">
-              <img src="@/assets/images/admin/business_license.png">
+              <img :src="dataInfo.lisence && dataInfo.lisence.url || '@/assets/images/admin/business_license.png'">
             </p>
           </div>
         </div>
@@ -74,36 +74,55 @@
 </template>
 
 <script>
+import {
+  getComInfo
+} from '@/api/admin/account'
 export default {
   name: 'AdminAccount',
   components: {
   },
   data() {
     return {
-      tabList: [],
       total: 0,
       loading: false,
-      dataList: [],
-      queryForm: {
-        baseName: '', // 自选库名称
-        page: 1, // 当前页
-        limit: 10 // 每页条数
-      },
-      form: {
-        title: '', // 需求标题
-        content: ''// 需求内容
-      },
-      rules: {
-        title: [
-          { required: true, message: '请输入标题', trigger: 'blur' }
-        ]
-      },
-      showAndHide: 1
+      dataInfo: {}
     }
   },
   created() {
+    this.getComInfo()
   },
   methods: {
+    getComInfo() {
+      getComInfo().then(res => {
+        this.dataInfo = res.data || {}
+      })
+    },
+    setCompanyType(type) {
+      let str = ''
+      switch (type) {
+        case 1:
+          str = '国有企业'
+          break
+        case 2:
+          str = '集体企业'
+          break
+        case 3:
+          str = '联营企业'
+          break
+        case 4:
+          str = '股份合作制企业'
+          break
+        case 5:
+          str = '私营企业'
+          break
+        case 6:
+          str = '合伙企业'
+          break
+        default:
+          break
+      }
+      return str
+    }
   }
 }
 </script>
@@ -173,6 +192,10 @@ export default {
             height: 102px;
             width: 102px;
             border: 1px solid #cccccc;
+            >img{
+              width:100%;
+              height:100%;
+            }
           }
         }
       }

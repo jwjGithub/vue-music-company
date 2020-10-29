@@ -27,44 +27,131 @@
         <div class="right mlx42">
           <div class="row">
             <p class="row-title">公司名称</p>
-            <p class="row-text">和回房间的撒谎近段时间</p>
+            <p class="row-text">{{ dataInfo.companyName }}</p>
           </div>
           <div class="row">
             <p class="row-title">账号</p>
-            <p class="row-text">fdhfd</p>
+            <p class="row-text">{{ dataInfo.sysUserEntity && dataInfo.sysUserEntity.username }}</p>
           </div>
           <div class="row">
             <p class="row-title">密码</p>
             <p class="row-text">
               <span class="mr12">*****</span>
-              <img src="@/assets/images/admin/icon_edit.png">
+              <img class="pointer" src="@/assets/images/admin/icon_edit.png" @click="openUpdatePassword">
             </p>
           </div>
           <div class="row">
             <p class="row-title">手机</p>
             <p class="row-text">
-              <span class="mr12">18224055666</span>
-              <img src="@/assets/images/admin/icon_edit.png">
+              <span class="mr12">{{ dataInfo.sysUserEntity && dataInfo.sysUserEntity.mobile }}</span>
+              <img class="pointer" src="@/assets/images/admin/icon_edit.png" @click="openDialogOption('mobile')">
             </p>
           </div>
           <div class="row">
             <p class="row-title">邮箱</p>
             <p class="row-text">
-              <span class="mr12">12345787@qq.com</span>
-              <img src="@/assets/images/admin/icon_edit.png">
+              <span class="mr12">{{ dataInfo.sysUserEntity && dataInfo.sysUserEntity.email }}</span>
+              <img class="pointer" src="@/assets/images/admin/icon_edit.png" @click="openDialogOption('email')">
             </p>
           </div>
           <div class="row">
             <p class="row-title">注册日期</p>
-            <p class="row-text">2012-10-24</p>
+            <p class="row-text">{{ dataInfo.sysUserEntity && dataInfo.sysUserEntity.createTime }}</p>
           </div>
         </div>
       </div>
     </div>
+    <!-- 修改密码 弹窗 -->
+    <mus-dialog
+      title="修改密码"
+      :loading="dialogUpdatePassword.loading"
+      :is-show="dialogUpdatePassword.show"
+      :width="'600px'"
+      @handleClose="dialogUpdatePassword.show = false"
+      @handleConfirm="saveUpdatePassword"
+    >
+      <div class="pl24 pr24 pt24 pb24">
+        <el-form ref="passwordForm" :model="passwordForm" :rules="passwordRules" label-width="130px" :inline="true" class="text-center">
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item label="验证方式：" prop="type">
+                <el-select v-model="passwordForm.type" placeholder="请选择" class="w30">
+                  <el-option label="手机号验证" value="mobile" />
+                  <el-option label="邮箱验证" value="email " />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item v-if="passwordForm.type" label="手机验证码：" prop="vercode">
+                <div class="w30 text-left">
+                  <el-input v-model="passwordForm.vercode" class="w15"></el-input>
+                  <el-button v-loading="passLoading" type="primary" class="btn-success w14 ml10" :disabled="passSendCodeType" @click="getPassSendCode">{{ passSendCodeCount }}</el-button>
+                </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="旧密码：" prop="password">
+                <el-input v-model="passwordForm.password" type="password" placeholder="请输入" class="w30"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="新密码：" prop="newPassword">
+                <el-input v-model="passwordForm.newPassword" type="password" placeholder="请输入" class="w30"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="确认密码：" prop="newPassword2">
+                <el-input v-model="passwordForm.newPassword2" type="password" placeholder="请输入" class="w30"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </mus-dialog>
+    <!-- 修改手机号/邮箱密码 弹窗 -->
+    <mus-dialog
+      :title="dialogOption.title"
+      :loading="dialogOption.loading"
+      :is-show="dialogOption.show"
+      :width="'600px'"
+      @handleClose="dialogOption.show = false"
+      @handleConfirm="handleConfirm"
+    >
+      <div class="pl24 pr24 pt24 pb24">
+        <el-form ref="form" :model="form" :rules="rules" label-width="150px" :inline="true" class="text-center">
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item v-if="form.type" :label="form.type == 'mobile' ? '邮箱验证码：' : '手机验证码：'" prop="vercode">
+                <div class="w30 text-left">
+                  <el-input v-model="form.vercode" class="w15"></el-input>
+                  <el-button v-loading="phoneLoading" type="primary" class="btn-success w14 ml10" :disabled="phoneSendCodeType" @click="getPhoneSendCode">{{ phoneSendCodeCount }}</el-button>
+                </div>
+              </el-form-item>
+            </el-col>
+            <el-col v-if="form.type == 'mobile'" :span="24">
+              <el-form-item label="修改后的手机号：" prop="mobile">
+                <el-input v-model="form.mobile" type="text" placeholder="请输入" class="w30"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col v-if="form.type == 'email'" :span="24">
+              <el-form-item label="修改后的邮箱：" prop="email">
+                <el-input v-model="form.email" type="text" placeholder="请输入" class="w30"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </mus-dialog>
   </div>
 </template>
 
 <script>
+import {
+  getComInfo,
+  sendVerificationCode,
+  updatePassword,
+  updateEmailOrMobile
+} from '@/api/admin/account'
 export default {
   name: 'AdminAccount',
   components: {
@@ -80,21 +167,198 @@ export default {
         page: 1, // 当前页
         limit: 10 // 每页条数
       },
+      dataInfo: {},
+      phoneLoading: false,
+      phoneSendCodeType: false, // 获取手机验证码状态 false 可以获取 true 不可获取
+      phoneSendCodeCount: '获取验证码',
+      dialogOption: {
+        title: '',
+        show: false,
+        loading: false
+      },
       form: {
-        title: '', // 需求标题
-        content: ''// 需求内容
+        vercode: '', // 验证码
+        type: '', // 修改项mobile/email
+        mobile: '', // 修改后的手机号
+        email: '' // 修改后的邮箱
       },
       rules: {
-        title: [
-          { required: true, message: '请输入标题', trigger: 'blur' }
+        vercode: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '请输入新的手机号', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入新的邮箱', trigger: 'blur' }
+        ]
+      },
+      // 修改密码弹框
+      dialogUpdatePassword: {
+        title: '',
+        show: false,
+        loading: false
+      },
+      passLoading: false,
+      passSendCodeType: false, // 获取手机验证码状态 false 可以获取 true 不可获取
+      passSendCodeCount: '获取验证码',
+      passwordForm: {}, // 修改密码表单
+      passwordRules: {
+        type: [
+          { required: true, message: '请选择验证方式', trigger: ['blur', 'change'] }
+        ],
+        vercode: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入旧密码', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' }
+        ],
+        newPassword2: [
+          { required: true, message: '请输入确认密码', trigger: 'blur' }
         ]
       },
       showAndHide: 1
     }
   },
   created() {
+    this.getComInfo()
   },
   methods: {
+    getComInfo() {
+      getComInfo().then(res => {
+        this.dataInfo = res.data || {}
+        console.log(this.dataInfo, '-sysUserEntity-')
+      })
+    },
+    // 打开修改密码窗口
+    openUpdatePassword() {
+      this.dialogUpdatePassword = {
+        show: true,
+        loading: false
+      }
+      this.passwordForm = {
+        password: '', // 密码
+        newPassword: '', // 新密码
+        newPassword2: '', // 确认密码
+        vercode: '', // 验证码
+        type: '' // mobile 验证手机，email 验证邮箱
+      }
+      this.resetForm('passwordForm')
+    },
+    // 打开修改手机/邮箱 弹框
+    openDialogOption(type) {
+      this.form = {
+        vercode: '', // 验证码
+        type: type, // 修改项mobile/email
+        mobile: '', // 修改后的手机号
+        email: '' // 修改后的邮箱
+      }
+      this.dialogOption = {
+        title: type === 'mobile' ? '修改手机' : '修改邮箱',
+        show: true,
+        loading: false
+      }
+      this.resetForm('form')
+    },
+    // 获取修改密码 验证码
+    getPassSendCode() {
+      let json = {
+        updateType: this.passwordForm.type,
+        type: 'updatePassword'
+      }
+      this.passLoading = true
+      sendVerificationCode(json).then(res => {
+        let _this = this
+        this.passSendCodeType = true
+        this.passSendCodeCount = '60秒后重新获取'
+        let count = 60
+        let indexS = ''
+        this.passLoading = false
+        function countTimeout() {
+          indexS = setTimeout(() => {
+            if (count <= 1) {
+              _this.passSendCodeType = false
+              _this.passSendCodeCount = '获取验证码'
+            } else {
+              count -= 1
+              _this.passSendCodeCount = count + '秒后重新获取'
+              countTimeout()
+            }
+          }, 1000)
+        }
+        countTimeout()
+      }).catch(() => {
+        this.passLoading = false
+      })
+    },
+    // 获取修改手机号/邮箱 验证码
+    getPhoneSendCode() {
+      let json = {
+        updateType: this.form.type === 'mobile' ? 'email' : 'mobile',
+        type: 'updateOther '
+      }
+      this.phoneLoading = true
+      sendVerificationCode(json).then(res => {
+        let _this = this
+        this.phoneSendCodeType = true
+        this.phoneSendCodeCount = '60秒后重新获取'
+        let count = 60
+        let indexS = ''
+        this.phoneLoading = false
+        function countTimeout() {
+          indexS = setTimeout(() => {
+            if (count <= 1) {
+              _this.phoneSendCodeType = false
+              _this.phoneSendCodeCount = '获取验证码'
+            } else {
+              count -= 1
+              _this.phoneSendCodeCount = count + '秒后重新获取'
+              countTimeout()
+            }
+          }, 1000)
+        }
+        countTimeout()
+      }).catch(() => {
+        this.phoneLoading = false
+      })
+    },
+    // 修改密码确认回调
+    saveUpdatePassword() {
+      this.$refs['passwordForm'].validate((valid) => {
+        if (valid) {
+          this.dialogUpdatePassword.loading = true
+          updatePassword(this.passwordForm).then(res => {
+            this.$message.success('修改成功')
+            this.dialogUpdatePassword.loading = false
+            this.dialogUpdatePassword.show = false
+          }).catch(() => {
+            this.dialogUpdatePassword.loading = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    // 修改 手机/邮箱回调
+    handleConfirm() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.dialogOption.loading = true
+          updateEmailOrMobile(this.form).then(res => {
+            this.$message.success('修改成功')
+            this.dialogOption.loading = false
+            this.dialogOption.show = false
+          }).catch(() => {
+            this.dialogOption.loading = false
+          })
+        } else {
+          return false
+        }
+      })
+    }
   }
 }
 </script>
