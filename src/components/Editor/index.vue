@@ -168,7 +168,7 @@ export default {
 }
 
 .ql-snow .ql-tooltip[data-mode="video"]::before {
-  content: "请输入视频地址:";
+  content: "请输入媒体地址:";
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
