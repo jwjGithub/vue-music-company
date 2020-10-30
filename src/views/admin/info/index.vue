@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-28 22:23:47
+ * @LastEditTime: 2020-10-30 22:17:33
 -->
 <template>
   <div class="main-page admin-account">
@@ -36,22 +36,30 @@
           <div class="row">
             <p class="row-title">公司性质</p>
             <p class="row-text">
-              <span class="mr12">{{ setCompanyType(dataInfo.companyType) }}</span>
-              <img src="@/assets/images/admin/icon_edit.png">
+              <span v-if="companyNature" class="mr12">{{ setCompanyType(dataInfo.companyType) }}</span>
+              <span v-else>
+                <el-select v-model="companyInfo.companyType" placeholder="请选择" class="w20">
+                  <el-option label="国有企业" value="1" />
+                  <el-option label="集体企业" value="2" />
+                  <el-option label="联营企业" value="3" />
+                  <el-option label="股份合作制企业" value="4" />
+                  <el-option label="私营企业" value="5" />
+                  <el-option label="合伙企业" value="6" />
+                </el-select>
+                <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+              </span>
+              <img v-if="companyNature" src="@/assets/images/admin/icon_edit.png" @click="editCompanyType">
             </p>
           </div>
           <div class="row">
             <p class="row-title">地址</p>
             <p class="row-text">
-              <span class="mr12">{{ dataInfo.address }}</span>
-              <img src="@/assets/images/admin/icon_edit.png">
-            </p>
-          </div>
-          <div class="row">
-            <p class="row-title">简介</p>
-            <p class="row-text">
-              <span class="mr12" v-html="dataInfo.introduction"></span>
-              <img src="@/assets/images/admin/icon_edit.png">
+              <span v-if="addressClick" class="mr12">{{ dataInfo.address }}</span>
+              <span v-else>
+                <el-input v-model="companyInfo.address" class="w20"></el-input>
+                <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+              </span>
+              <img v-if="addressClick" src="@/assets/images/admin/icon_edit.png" @click="editAddress">
             </p>
           </div>
           <div class="row">
@@ -67,6 +75,17 @@
               <img :src="dataInfo.lisence && dataInfo.lisence.url || '@/assets/images/admin/business_license.png'">
             </p>
           </div>
+          <div class="row">
+            <p class="row-title">简介</p>
+            <p class="row-text" style="min-height:250px;">
+              <span v-if="introductionClick" class="mr12" v-html="dataInfo.introduction"></span>
+              <span v-else>
+                <Editor v-model="companyInfo.introduction" style="width:100%;" />
+                <el-button type="primary" class="mtx50 ml10" @click="saveCompanyType">保存</el-button>
+              </span>
+              <img v-if="introductionClick" src="@/assets/images/admin/icon_edit.png" @click="editIntroduction">
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -75,17 +94,31 @@
 
 <script>
 import {
-  getComInfo
+  getComInfo,
+  updateCompanyMessage
 } from '@/api/admin/account'
+import Editor from '@/components/Editor'
 export default {
   name: 'AdminAccount',
   components: {
+    Editor
   },
   data() {
     return {
       total: 0,
       loading: false,
-      dataInfo: {}
+      dataInfo: {},
+      companyNature: true,
+      addressClick: true,
+      introductionClick: true,
+      companyInfo: {
+        id: null, // 公司ID
+        companyType: null, // 公司类型 1国有企业 2集体企业 3联营企业 4股份合作制企业 5私营企业 6合伙企业
+        introduction: null, // 公司简介
+        address: null, // 公司地址
+        profileAtt: null, // 公司图标
+        url: null // 网址
+      }
     }
   },
   created() {
@@ -122,6 +155,33 @@ export default {
           break
       }
       return str
+    },
+    // 修改公司性质
+    editCompanyType() {
+      this.companyNature = false
+      this.companyInfo.id = this.dataInfo.id
+      this.companyInfo.companyType = this.dataInfo.companyType
+    },
+    saveCompanyType() {
+      updateCompanyMessage(this.companyInfo).then(res => {
+        this.$message.success('修改成功')
+        this.companyNature = true
+        this.addressClick = true
+        this.introductionClick = true
+        this.getComInfo()
+      })
+    },
+    // 编辑地址
+    editAddress() {
+      this.addressClick = false
+      this.companyInfo.id = this.dataInfo.id
+      this.companyInfo.address = this.dataInfo.address
+    },
+    // 修改简介
+    editIntroduction() {
+      this.introductionClick = false
+      this.companyInfo.id = this.dataInfo.id
+      this.companyInfo.introduction = this.dataInfo.introduction
     }
   }
 }
@@ -160,7 +220,7 @@ export default {
     }
     >.content{
       flex:1;
-			overflow: hidden;
+			overflow:auto;
       display: flex;
       border-top: 4px solid #f7fbfe;
       >.left{
@@ -185,6 +245,7 @@ export default {
             font-size: 14px;
           }
           >.row-text{
+            flex:1;
             color: #333333;
             font-size: 14px;
           }
