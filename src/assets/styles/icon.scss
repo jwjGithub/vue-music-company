@@ -9,4 +9,10 @@
     height:16px;
     background-image: url('~@/assets/images/songCollection/icon-play.png');
   }
+  &.icon-edit{
+    width: 16px;
+    height: 14px;    
+    margin-right:8px; 
+    background-image: url('~@/assets/images/admin/icon_edit.png');
+  }
 }

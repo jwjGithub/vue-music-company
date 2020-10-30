@@ -25,7 +25,8 @@ service.interceptors.request.use(
     if (getToken()) {
       config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
       // 过滤分页数字
-      if (config.data) {
+      console.log(config.data, 'config.data')
+      if (config.data && !(config.data instanceof FormData)) {
         let data = JSON.parse(JSON.stringify(config.data))
         if (data.page) {
           data.page = data.page.toString()
