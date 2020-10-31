@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-28 22:22:04
+ * @LastEditTime: 2020-10-31 16:25:30
 -->
 <template>
   <div class="main-page admin-account">
@@ -17,11 +17,10 @@
       <div class="content ptx28">
         <div class="left">
           <div class="left-img">
-            <img src="@/assets/images/admin/user_head.png">
+            <img :src="dataInfo.sysUserEntity && dataInfo.sysUserEntity.profileUrl || '@/assets/images/admin/icon_company.png'">
           </div>
           <div class="left-title mt22">
-            <img src="@/assets/images/admin/icon_edit.png">
-            <span class="ml8">替换头像</span>
+            <el-button type="text" icon="icon icon-edit" @click="openFileUpload">替换头像</el-button>
           </div>
         </div>
         <div class="right mlx42">
@@ -61,6 +60,8 @@
         </div>
       </div>
     </div>
+    <!-- 附件上传 -->
+    <input ref="upload-file" type="file" accept="image/*" style="display: none" @change="uploadFileChange" />
     <!-- 修改密码 弹窗 -->
     <mus-dialog
       title="修改密码"
@@ -150,8 +151,12 @@ import {
   getComInfo,
   sendVerificationCode,
   updatePassword,
-  updateEmailOrMobile
+  updateEmailOrMobile,
+  updateMessage
 } from '@/api/admin/account'
+import {
+  uploadImg
+} from '@/api/common'
 export default {
   name: 'AdminAccount',
   components: {
@@ -358,6 +363,38 @@ export default {
           return false
         }
       })
+    },
+    // 打开附件上传
+    openFileUpload() {
+      this.$refs['upload-file'].click()
+    },
+    uploadFileChange() {
+      let fileObj = this.$refs['upload-file']
+      let files = fileObj.files
+      if (files.length > 0) {
+        let file = files[0]
+        const reg = '.*\\.(jpg|JPG|png|PNG)'
+        if (file.name.match(reg) == null) {
+          this.$notify.error({ title: '请选择格式为“jpg”或“png”的文件' })
+          return false
+        }
+        if (file.size > 1024 * 1024 * 5) {
+          this.$notify.error({ title: '对不起，文件不能大于5M，请重新上传' })
+          return false
+        }
+        let formData = new FormData()
+        console.log(file, '-file')
+        formData.append('file', file)
+        uploadImg(formData).then(res => {
+          let info = {
+            profile: res.data.id
+          }
+          updateMessage(info).then(res => {
+            this.$message.success('修改成功')
+            this.getComInfo()
+          })
+        })
+      }
     }
   }
 }
@@ -402,9 +439,14 @@ export default {
       >.left{
         width: 370px;
         >.left-img{
-          width: 202px;
+          width: 200px;
+          height: 200px;
           margin: 0 auto;
           border: 1px solid #cccccc;
+          >img{
+            height: 100%;
+            width: 100%;
+          }
         }
         >.left-title{
           text-align: center;

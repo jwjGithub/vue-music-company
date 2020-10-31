@@ -47,3 +47,11 @@ export function updateCompanyMessage(data) {
     data: data
   })
 }
+// 修改管理员信息
+export function updateMessage(data) {
+  return request({
+    url: `/comadmin/updateMessage`,
+    method: 'post',
+    data: data
+  })
+}
