@@ -303,7 +303,7 @@ export default {
     getPhoneSendCode() {
       let json = {
         updateType: this.form.type === 'mobile' ? 'email' : 'mobile',
-        type: 'updateOther '
+        type: 'updateOther'
       }
       this.phoneLoading = true
       sendVerificationCode(json).then(res => {

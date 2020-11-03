@@ -47,6 +47,21 @@ export const constantRoutes = [
         name: 'AdminInfo',
         component: () => import('@/views/admin/info/index'),
         meta: { title: '公司信息管理' }
+      },
+      {
+        path: 'lowerAccount',
+        component: () => import('@/views/admin/lowerAccount/index'),
+        meta: { title: '子账号管理', icon: 'tree' },
+        redirect: '/admin/lowerAccount/menu',
+        hidden: true,
+        children: [
+          {
+            path: 'menu',
+            name: 'AdminLowerAccountMenu',
+            component: () => import('@/views/admin/lowerAccount/menu/index'),
+            meta: { title: '菜单管理' }
+          }
+        ]
       }
     ]
   },
