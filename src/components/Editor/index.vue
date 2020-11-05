@@ -40,8 +40,8 @@ const toolbarOptions = [
   [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
   [{ align: [] }], // 对齐方式
   ['clean'], // 清除文本格式
-  ['link', 'video'] // 链接、图片、视频
-  // ['link', 'image', 'video'] // 链接、图片、视频
+  // ['link', 'video'] // 链接、图片、视频
+  ['link', 'image', 'video'] // 链接、图片、视频
 ]
 
 import { quillEditor } from 'vue-quill-editor'

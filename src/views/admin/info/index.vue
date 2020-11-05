@@ -6,7 +6,7 @@
  * @LastEditTime: 2020-10-30 22:17:33
 -->
 <template>
-  <div class="main-page admin-account">
+  <div class="main-page admin-info">
     <div class="main-content">
       <div class="header">
         <div class="left">
@@ -23,7 +23,7 @@
               </div>
               <el-button type="text" icon="icon icon-edit" @click="openFileUpload">替换公司标志</el-button>
             </div>
-            <div class="right">
+            <div class="right ml50">
               <div class="row">
                 <div class="row-title">公司名称</div>
                 <div class="row-text">{{ dataInfo.companyName }}</div>
@@ -83,9 +83,9 @@
               <div class="row">
                 <div class="row-title">简介</div>
                 <div class="row-text">
-                  <div style="max-width:500px;">
+                  <div style="max-width:550px;">
                     <div v-if="introductionClick">
-                      <div v-html="dataInfo.introduction"></div>
+                      <div class="row-cont" v-html="dataInfo.introduction"></div>
                     </div>
                     <div v-else class="h26 w50">
                       <Editor v-model="companyInfo.introduction" style="width:100%;" />
@@ -240,7 +240,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.admin-account{
+.admin-info{
   padding:10px;
   width:100%;
   height:100%;
@@ -281,7 +281,7 @@ export default {
           >.left-img{
             width: 200px;
             height: 200px;
-            margin: 0 76px;
+            margin: 0 150px 0 80px;
             text-align: center;
             border: 1px solid #cccccc;
             display:flex;
@@ -318,6 +318,7 @@ export default {
                   height:100%;
                 }
               }
+
             }
 
           }
@@ -328,5 +329,16 @@ export default {
 }
 </style>
 <style lang="scss">
+.admin-info{
+  .row-cont{
+    max-width: 550px;
+    max-height: 350px;
+    img{
+      max-width: 500px;
+      max-height: 300px;
+    }
+  }
+}
+
 </style>
 
