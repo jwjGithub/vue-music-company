@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-28 22:25:36
+ * @LastEditTime: 2020-11-09 14:34:54
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -65,7 +65,7 @@ export const constantRoutes = [
             path: 'infoSet',
             name: 'AdminLowerAccountInfoSet',
             component: () => import('@/views/admin/lowerAccount/infoSet/index'),
-            meta: { title: '信息设置' }
+            meta: { title: '业务人员账号管理' }
           }
         ]
       }
