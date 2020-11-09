@@ -4,7 +4,7 @@
       <div class="header">
         <div class="left">
           <div class="tag mr10"></div>
-          <div class="title">业务人员账号管理</div>
+          <div class="title">菜单权限分配</div>
         </div>
         <div class="right pr30">
           <el-input v-model="queryForm.username" class="search-input w20 mr10" size="mini" placeholder="请输入账号" @keyup.enter.native="getList"></el-input>
@@ -101,12 +101,16 @@
 </template>
 <script>
 import {
+  saveDelete
+} from '@/api/admin/lowerAccount'
+import {
   getList,
   saveAdd,
   saveEdit,
-  saveDelete
-  // getUserUnderCom
-} from '@/api/admin/lowerAccount'
+  saveChangeStatus,
+  getTreeList,
+  getInfo
+} from '@/api/admin/role'
 export default {
   name: 'List',
   components: {},
@@ -146,8 +150,10 @@ export default {
       dataList: [],
       userList: [], // 用户列表
       queryForm: {
-        username: '', // 账号
-        realName: '', // 姓名
+        starttime: '', // 开始时间
+        endtime: '', // 结束时间
+        roleName: '', // 角色名称
+        status: '', // 角色状态 0正常 1停用
         page: 1, // 当前页
         limit: 20 // 每页条数
       },

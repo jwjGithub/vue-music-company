@@ -55,18 +55,18 @@ export const constantRoutes = [
         redirect: '/admin/lowerAccount/infoSet',
         children: [
           {
-            path: 'menu',
-            name: 'AdminLowerAccountMenu',
-            component: () => import('@/views/admin/lowerAccount/menu/index'),
-            meta: { title: '菜单管理' },
-            hidden: true
-          },
-          {
             path: 'infoSet',
             name: 'AdminLowerAccountInfoSet',
             component: () => import('@/views/admin/lowerAccount/infoSet/index'),
             meta: { title: '业务人员账号管理' }
+          },
+          {
+            path: 'role',
+            name: 'AdminLowerAccountRole',
+            component: () => import('@/views/admin/lowerAccount/role/index'),
+            meta: { title: '菜单权限分配' }
           }
+
         ]
       }
     ]
