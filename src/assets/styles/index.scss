@@ -85,3 +85,55 @@ div:focus {
     width:90px;
   }
 }
+
+// 页面主体样式
+.main-page{
+  width:100%;
+  height:100%;
+  padding: 10px;
+  >.main-content{
+    width:100%;
+    height:100%;
+    background-color: white;
+    display:flex;
+    flex-direction: column;
+    >.header{
+      margin-bottom: 10px;
+      height:60px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      >.left{
+        padding-left:20px;
+        display: flex;
+        align-items:center;
+        >.tag{
+          width: 4px;
+          height: 24px;
+          background: #65a3dd;
+        }
+        >.title{
+          font-size: 20px;
+          color: #65a3dd;
+        }
+      }
+      >.right{
+        display: flex;
+        align-items:center;
+        .search-input{
+          ::v-deep .el-input__inner{
+            background-color:#f8f8f8;
+          }
+        }
+      }
+    }
+    >.content{
+      flex:1;
+      overflow: hidden;
+      >.lists{
+        width:100%;
+        height:100%;
+      }
+    }
+  }
+}
