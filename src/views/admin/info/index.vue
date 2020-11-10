@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-30 22:17:33
+ * @LastEditTime: 2020-11-10 18:16:41
 -->
 <template>
   <div class="main-page admin-info">
@@ -76,7 +76,7 @@
                 <div class="row-title">营业执照</div>
                 <div class="row-text">
                   <div class="row-img mb10">
-                    <img :src="dataInfo.lisence && dataInfo.lisence.url || '@/assets/images/admin/business_license.png'">
+                    <img :src="dataInfo.lisence && dataInfo.lisence.tempUrl || '@/assets/images/admin/business_license.png'">
                   </div>
                 </div>
               </div>
