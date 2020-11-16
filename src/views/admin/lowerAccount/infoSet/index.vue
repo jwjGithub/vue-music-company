@@ -47,7 +47,7 @@
     </div>
     <!-- 新增/修改 弹窗 -->
     <mus-dialog
-      :title="dialogOption.title"
+      :title="dialogOption.title + '(可新增业务人员账号数：'+ userNumLimit +')'"
       :loading="dialogOption.loading"
       :is-show="dialogOption.show"
       :width="'860px'"
@@ -142,6 +142,7 @@ export default {
         multiple: true
       },
       total: 0,
+      userNumLimit: 0,
       loading: false,
       dataList: [],
       userList: [], // 用户列表
@@ -195,6 +196,7 @@ export default {
         console.log(this.queryForm)
         this.dataList = res.data || []
         this.total = res.count || 0
+        this.userNumLimit = res.userNumLimit || 0 // 可新增业务人员账号数
         this.loading = false
       }).catch(() => {
         this.loading = false
