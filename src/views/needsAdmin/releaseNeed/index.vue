@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-28 22:05:53
+ * @LastEditTime: 2020-11-17 11:54:03
 -->
 <template>
   <div class="main-page needsAdmin-releaseNeed">
@@ -17,16 +17,39 @@
       <div class="content">
         <div v-if="showAndHide === 1" class="top">
           <el-form ref="form" class="label-position-top" :model="form" :rules="rules" label-width="130px" label-position="top" size="mini">
-            <el-row></el-row>
             <el-form-item label="请输入标题" prop="title">
               <el-input v-model="form.title" style="width:100%;"></el-input>
             </el-form-item>
+            <el-row :gutter="30">
+              <el-col :span="12">
+                <el-form-item label="自选库类型/名称" prop="optionalName">
+                  <el-select v-model="form.optionalType" style="width:30%;">
+                    <el-option label="词" :value="0" />
+                    <el-option label="曲" :value="1" />
+                    <el-option label="词/曲" :value="2" />
+                  </el-select>
+                  <el-input v-model="form.optionalName" placeholder="请输入名称" style="width:70%;"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="截止时间" prop="expiredTime">
+                  <el-date-picker
+                    v-model="form.expiredTime"
+                    type="datetime"
+                    style="width:100%;"
+                    placeholder="请选择截止时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="请输入需求详情" prop="content" style="min-height:300px;">
               <Editor v-model="form.content" style="width:100%;" />
-              <!-- <el-input v-model="form.content" type="textarea" :rows="4" placeholder="请输入" :resize="'none'" style="width:100%;"></el-input> -->
             </el-form-item>
             <el-form-item class="text-center">
-              <el-button type="primary" size="medium" @click="addNeed">发布</el-button>
+              <el-button type="primary" :loading="loading" class="mr50" size="medium" @click="addNeed(0)">发布</el-button>
+              <el-button class="ml50" :loading="loading" size="medium" @click="addNeed(1)">保存为草稿</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -68,11 +91,21 @@ export default {
       },
       form: {
         title: '', // 需求标题
+        optionalName: '', // 需求库名称
+        optionalType: 0, // 需求库类型 0：词库 1：曲库 2：既是曲库又是词库传
+        expiredTime: '', // 截止时间
+        status: '', // 状态，0正常 1草稿
         content: ''// 需求内容
       },
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
+        ],
+        expiredTime: [
+          { required: true, message: '请选择截止时间', trigger: ['blur', 'change'] }
+        ],
+        optionalName: [
+          { required: true, message: '请输入需求库名称', trigger: 'blur' }
         ]
       },
       showAndHide: 1
@@ -82,14 +115,17 @@ export default {
   },
   methods: {
     // 发布需求
-    addNeed() {
+    addNeed(status) {
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          this.loading = true
+          this.form.status = status
+          this.form.effectiveTime = this.parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}') // sb代码
           addNeed(this.form).then(res => {
-            if (res.msg === 'success') {
-              this.showAndHide = 2
-            }
-            console.log(res, '发布需求')
+            this.loading = false
+            this.showAndHide = 2
+          }).catch(() => {
+            this.loading = false
           })
         } else {
           return false
@@ -100,6 +136,10 @@ export default {
       this.showAndHide = 1
       this.form = {
         title: '', // 需求标题
+        optionalName: '', // 需求库名称
+        optionalType: 0, // 需求库类型 0：词库 1：曲库 2：既是曲库又是词库传
+        expiredTime: '', // 截止时间
+        status: '', // 状态，0正常 1草稿
         content: ''// 需求内容
       }
       this.resetForm('form')

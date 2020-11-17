@@ -97,6 +97,7 @@
                   placeholder="请选择"
                   default-time="23:59:59"
                   value-format="yyyy-MM-dd HH:mm:ss"
+                  format="yyyy-MM-dd HH:mm:ss"
                 >
                 </el-date-picker>
               </el-form-item>
