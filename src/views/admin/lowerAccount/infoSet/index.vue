@@ -92,6 +92,19 @@
                 <el-input v-model="form.label" style="width:100%;" placeholder="请输入标签，多个用逗号隔开"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item label="角色：">
+                <el-select
+                  v-model="form.userCompanyroleId"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                  style="width:100%;"
+                >
+                  <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id" />
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
 
         </el-form>
@@ -104,8 +117,8 @@ import {
   getList,
   saveAdd,
   saveEdit,
-  saveDelete
-  // getUserUnderCom
+  saveDelete,
+  getCompanyRoleList
 } from '@/api/admin/lowerAccount'
 export default {
   name: 'List',
@@ -145,7 +158,7 @@ export default {
       userNumLimit: 0,
       loading: false,
       dataList: [],
-      userList: [], // 用户列表
+      roleList: [], // 角色列表
       queryForm: {
         username: '', // 账号
         realName: '', // 姓名
@@ -180,7 +193,7 @@ export default {
   },
   created() {
     this.getList()
-    // this.getUserUnderCom()
+    this.getCompanyRoleList()
   },
   methods: {
     // 多选框选中数据
@@ -202,12 +215,12 @@ export default {
         this.loading = false
       })
     },
-    // 查询用户列表
-    // getUserUnderCom() {
-    //   getUserUnderCom().then(res => {
-    //     this.userList = res.data || []
-    //   })
-    // },
+    // 查询角色列表
+    getCompanyRoleList() {
+      getCompanyRoleList().then(res => {
+        this.roleList = res.data || []
+      })
+    },
     // 打开新增窗口
     openAdd() {
       this.dialogOption = {
@@ -216,6 +229,7 @@ export default {
         loading: false
       }
       this.form = {
+        userCompanyroleId: '', // 角色id
         username: '', // 用户名
         realname: '', // 姓名
         password: '', // 密码

@@ -2,7 +2,7 @@
  * @Date: 2020-10-22 09:18:46
  * @Description: 子账号接口
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-22 17:51:12
+ * @LastEditTime: 2020-11-17 09:17:13
  */
 import request from '@/utils/request'
 
@@ -34,6 +34,13 @@ export function saveEdit(data) {
 export function saveDelete(ids) {
   return request({
     url: `/comadmin/deleteEmployee/${ids}`,
+    method: 'post'
+  })
+}
+// 获取角色列表
+export function getCompanyRoleList() {
+  return request({
+    url: `/comadmin/getCompanyRoleList`,
     method: 'post'
   })
 }
