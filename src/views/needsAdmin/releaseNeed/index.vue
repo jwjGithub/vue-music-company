@@ -59,7 +59,7 @@
           </div>
           <div class="footer-btn mt50">
             <div class="mb20">恭喜发布成功！</div>
-            <el-button type="primary" size="mini" class="mt60" @click="intoNeeds">进入需求库</el-button>
+            <el-button type="primary" size="mini" class="mt60" @click="Go('/needsAdmin/list')">进入需求库</el-button>
             <el-button type="primary" size="mini" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
           </div>
         </div>
@@ -70,11 +70,12 @@
 
 <script>
 import {
-  addNeed
+  addNeed,
+  saveEdit
 } from '@/api/needsAdmin/releaseNeed'
 import Editor from '@/components/Editor'
 export default {
-  name: '',
+  name: 'NeedsAdminReleaseNeed',
   components: {
     Editor
   },
@@ -112,6 +113,9 @@ export default {
     }
   },
   created() {
+    if (this.$route.params.id) {
+      this.form = this.$route.params
+    }
   },
   methods: {
     // 发布需求
@@ -121,12 +125,23 @@ export default {
           this.loading = true
           this.form.status = status
           this.form.effectiveTime = this.parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}') // sb代码
-          addNeed(this.form).then(res => {
-            this.loading = false
-            this.showAndHide = 2
-          }).catch(() => {
-            this.loading = false
-          })
+          // 编辑
+          if (this.form.id) {
+            saveEdit(this.form).then(res => {
+              this.loading = false
+              this.showAndHide = 2
+            }).catch(() => {
+              this.loading = false
+            })
+          } else {
+            // 新增
+            addNeed(this.form).then(res => {
+              this.loading = false
+              this.showAndHide = 2
+            }).catch(() => {
+              this.loading = false
+            })
+          }
         } else {
           return false
         }

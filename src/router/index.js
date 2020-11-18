@@ -96,6 +96,12 @@ export const constantRoutes = [
         name: 'needsAdminReleaseNeed',
         component: () => import('@/views/needsAdmin/releaseNeed/index'),
         meta: { title: '发布需求' }
+      },
+      {
+        path: 'list',
+        name: 'needsAdminList',
+        component: () => import('@/views/needsAdmin/list/index'),
+        meta: { title: '需求列表' }
       }
     ]
   }

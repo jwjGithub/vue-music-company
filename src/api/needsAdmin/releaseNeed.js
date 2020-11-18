@@ -15,3 +15,26 @@ export function addNeed(data) {
     data: data
   })
 }
+// 查询列表
+export function getList(data) {
+  return request({
+    url: '/company/needs/query',
+    method: 'post',
+    data: data
+  })
+}
+// 修改
+export function saveEdit(data) {
+  return request({
+    url: '/company/needs/update',
+    method: 'post',
+    data: data
+  })
+}
+// 删除
+export function saveDelete(ids) {
+  return request({
+    url: `/company/needs/delete/${ids}`,
+    method: 'post'
+  })
+}

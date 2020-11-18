@@ -45,7 +45,15 @@ Vue.component('MusDialog', MusDialog)
 Vue.use(ElementUI, { locale, size: 'medium' })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+// 路由跳转
+Vue.prototype.Go = function(url, query) {
+  router.push({
+    path: url,
+    query
+  }).catch(() => {
 
+  })
+}
 Vue.config.productionTip = false
 
 new Vue({
