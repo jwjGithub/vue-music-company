@@ -36,7 +36,7 @@
                 <span v-if="scope.row.status === 2" class="c-red">关闭</span>
               </template>
             </el-table-column>
-            <el-table-column prop="updatedUserId" min-width="120" label="创建人"></el-table-column>
+            <el-table-column prop="creatorName" min-width="120" label="创建人"></el-table-column>
             <el-table-column prop="createdTime" min-width="150" label="创建时间"></el-table-column>
             <el-table-column prop="contributionNum" min-width="100" label="投稿数"></el-table-column>
             <el-table-column prop="expiredTime" min-width="150" label="截止日期"></el-table-column>
