@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-11-09 14:34:54
+ * @LastEditTime: 2020-11-22 15:02:48
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -75,13 +75,19 @@ export const constantRoutes = [
     path: '/songCollection',
     component: Layout,
     redirect: '/songCollection/optionalLibrary',
-    meta: { title: '收歌管理', icon: 'tree' },
+    meta: { title: '曲库管理', icon: 'tree' },
     children: [
       {
         path: 'optionalLibrary',
         name: 'songCollectionOptionalLibrary',
         component: () => import('@/views/songCollection/optionalLibrary/index'),
         meta: { title: '自选库管理' }
+      },
+      {
+        path: 'needsLibrary',
+        name: 'songCollectionNeedsLibrary',
+        component: () => import('@/views/songCollection/needsLibrary/index'),
+        meta: { title: '需求库管理' }
       }
     ]
   },

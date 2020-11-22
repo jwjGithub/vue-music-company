@@ -1,12 +1,11 @@
 <!--
  * @Date: 2020-10-21 17:49:06
- * @Description: 自选库
+ * @Description: 需求库
  * @LastEditors: JWJ
- * @LastEditTime: 2020-11-22 20:28:01
- * @FilePath: \vue-music-company\src\views\songCollection\optionalLibrary\index.vue
+ * @LastEditTime: 2020-11-22 20:30:34
 -->
 <template>
-  <div class="main-page songCollection-optionalLibrary">
+  <div class="main-page songCollection-needsLibrary">
     <div class="main-content">
       <el-tabs
         v-model="tabActiveName"
@@ -14,7 +13,7 @@
         type="border-card"
         @tab-remove="removeTab"
       >
-        <el-tab-pane label="自选库列表" name="index">
+        <el-tab-pane label="需求库列表" name="index">
           <list @addTab="addTab"></list>
         </el-tab-pane>
         <el-tab-pane
@@ -32,13 +31,10 @@
 </template>
 
 <script>
-import {
-  getList
-} from '@/api/songCollection/optionalLibrary'
-import List from './components/List.vue'
+import List from './components/List'
 import Details from './components/Details'
 export default {
-  name: '',
+  name: 'SongCollectionNeedsLibrary',
   components: {
     'list': List,
     Details
@@ -46,20 +42,13 @@ export default {
   data() {
     return {
       tabActiveName: 'index',
-      tabList: [],
-      total: 0,
-      loading: false,
-      dataList: [],
-      queryForm: {
-        baseName: '', // 自选库名称
-        page: 1, // 当前页
-        limit: 10 // 每页条数
-      }
+      tabList: []// 展开的tab页列表
     }
   },
   created() {
   },
   methods: {
+    // 添加tab页
     addTab(row) {
       let newTabName = row.title + row.form.id
       let bl = true
@@ -80,6 +69,7 @@ export default {
         this.tabActiveName = newTabName
       }
     },
+    // 删除tab页
     removeTab(name) {
       for (let i = 0, len = this.tabList.length; i < len; i++) {
         let item = this.tabList[i]
@@ -93,22 +83,13 @@ export default {
           break
         }
       }
-    },
-    // 查询列表
-    getList() {
-      this.loading = true
-      getList(this.queryForm).then(res => {
-        this.dataList = res.data || []
-        this.total = res.count || 0
-        this.loading = false
-      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.songCollection-optionalLibrary{
+.songCollection-needsLibrary{
   padding:10px;
   width:100%;
   height:100%;
@@ -120,7 +101,7 @@ export default {
 }
 </style>
 <style lang="scss">
-.songCollection-optionalLibrary{
+.songCollection-needsLibrary{
   .main-tabs{
     width:100%;
     height:100%;
@@ -137,5 +118,4 @@ export default {
   }
 
 }
-
 </style>
