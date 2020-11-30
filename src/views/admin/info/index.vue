@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-11-10 18:16:41
+ * @LastEditTime: 2020-11-30 11:18:48
 -->
 <template>
   <div class="main-page admin-info">
@@ -21,7 +21,7 @@
               <div class="left-img">
                 <img :src="dataInfo.profile && dataInfo.profile.url || '@/assets/images/admin/icon_company.png'">
               </div>
-              <el-button type="text" icon="icon icon-edit" @click="openFileUpload">替换公司标志</el-button>
+              <el-button type="text" icon="icon icon-edit" style="margin: 24px 150px 0 80px;" @click="openFileUpload">替换公司标志</el-button>
             </div>
             <div class="right ml50">
               <div class="row">

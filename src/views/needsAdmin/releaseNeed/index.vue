@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-11-20 14:14:31
+ * @LastEditTime: 2020-11-30 11:12:00
 -->
 <template>
   <div class="main-page needsAdmin-releaseNeed">
@@ -59,8 +59,8 @@
           </div>
           <div class="footer-btn mt50">
             <div class="mb20">恭喜发布成功！</div>
-            <el-button type="primary" size="mini" class="mt60" @click="Go('/needsAdmin/list')">进入需求库</el-button>
-            <el-button type="primary" size="mini" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
+            <el-button type="primary" class="mt60" @click="Go('/needsAdmin/list')">进入需求库</el-button>
+            <el-button type="primary" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
           </div>
         </div>
       </div>

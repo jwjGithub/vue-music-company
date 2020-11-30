@@ -22,10 +22,10 @@
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column prop="title" min-width="150" label="名称">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="openDetails(scope.row)">{{ scope.row.title }}</el-button>
+                <el-button size="mini" type="text" @click="openDetails(scope.row)">{{ scope.row.optionalName }}</el-button>
               </template>
             </el-table-column>
-            <el-table-column prop="" min-width="150" label="关联需求"></el-table-column>
+            <el-table-column prop="title" min-width="150" label="关联需求"></el-table-column>
             <el-table-column prop="optionalTypeDes" min-width="150" label="类型"></el-table-column>
             <el-table-column prop="creatorName" min-width="150" label="创建人"></el-table-column>
             <el-table-column prop="" min-width="150" label="投稿数"></el-table-column>
