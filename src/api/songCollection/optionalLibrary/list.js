@@ -1,8 +1,8 @@
 /*
  * @Date: 2020-10-22 09:18:46
  * @Description: 自选库接口
- * @LastEditors: JWJ
- * @LastEditTime: 2020-10-22 17:51:12
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-02 14:19:34
  * @FilePath: \vue-music-company\src\api\songCollection\optionalLibrary.js
  */
 import request from '@/utils/request'
@@ -32,10 +32,11 @@ export function saveEdit(data) {
   })
 }
 // 删除保存
-export function saveDelete(ids) {
+export function saveDelete(data) {
   return request({
-    url: `/optional/base/deleteOptionalBase/${ids}`,
-    method: 'post'
+    url: '/optional/base/deleteOptional',
+    method: 'post',
+    data: data
   })
 }
 // 获取公司下所有用户

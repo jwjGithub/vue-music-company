@@ -1,10 +1,18 @@
+<!--
+ * @Descripttion: 自选库词库列表
+ * @version:
+ * @Author: jwj
+ * @Date: 2020-10-27 23:36:26
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-02 15:31:10
+-->
 <template>
   <div class="main-page">
     <div class="main-content">
       <div class="header">
         <div class="left">
           <div class="tag mr10"></div>
-          <div class="title">自选库</div>
+          <div class="title">词库</div>
         </div>
         <div class="right pr30">
           <el-input v-model="queryForm.baseName" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
@@ -130,6 +138,7 @@ export default {
       userList: [], // 用户列表
       queryForm: {
         baseName: '', // 自选库名称
+        optionalType: 0, // 自选库类型 0词 1曲
         page: 1, // 当前页
         limit: 20 // 每页条数
       },
@@ -189,7 +198,8 @@ export default {
         sharingPersons: '', // 分享人ID，多人用逗号隔开
         remark: '', // 备注
         upperLimit: '', // 最大限制数
-        sort: '' // 排序
+        sort: '', // 排序
+        optionalType: 0
       }
       this.resetForm('form')
     },
@@ -255,7 +265,7 @@ export default {
         type: 'warning'
       }).then(() => {
         let ids = type === 1 ? row.id : this.selectOption.ids.join(',')
-        saveDelete(ids).then(res => {
+        saveDelete({ optionalIds: ids, optionalType: 0 }).then(res => {
           this.$notify.success({
             title: '操作成功'
           })

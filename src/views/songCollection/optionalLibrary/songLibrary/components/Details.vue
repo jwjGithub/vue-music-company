@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 自选库曲库详情
+ * @version:
+ * @Author: jwj
+ * @Date: 2020-10-28 22:53:06
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-02 16:43:36
+-->
 <template>
   <div class="main-page">
     <div class="main-content">
@@ -5,10 +13,10 @@
         <div class="header">
           <div class="left">
             <div class="tag mr10"></div>
-            <div class="title">自选库内存歌曲</div>
+            <div class="title">曲库内存歌曲</div>
           </div>
           <div class="center">
-            <el-input v-model="queryForm.keyword" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
+            <el-input v-model="queryForm.title" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
             <el-button type="primary" size="mini" class="ml10 mr20" :loading="loading" @click="getList">查询</el-button>
           </div>
           <div class="right pr30">
@@ -148,8 +156,9 @@ export default {
       zxkList: [], // 自选库列表
       userList: [], // 用户列表
       queryForm: {
-        opBaseId: '', // 自选库详情id
-        keyword: '', // 关键字
+        id: '', // 自选库详情id
+        optionalType: 1, // 自选库类型 0词 1曲
+        title: '', // 关键字
         page: 1, // 当前页
         limit: 20 // 每页条数
       },
@@ -175,15 +184,14 @@ export default {
   methods: {
     // 查询自选库列表下拉
     getOptionalList() {
-      getOptionalList({ baseName: '' }).then(res => {
+      getOptionalList({ baseName: '', optionalType: 1 }).then(res => {
         this.zxkList = res.data || []
       })
     },
     // 查询列表
     getList() {
       this.loading = true
-      console.log(this.form, '11')
-      this.queryForm.opBaseId = this.form.id
+      this.queryForm.id = this.form.id
       getList(this.queryForm).then(res => {
         this.dataList = res.data || []
         this.total = res.count || 0
@@ -208,9 +216,9 @@ export default {
       }).then(() => {
         let json = {
           optionalId: this.form.id,
-          musicIds: type === 1 ? row.id : this.selectOption.ids.join(',')
+          workIds: type === 1 ? row.id : this.selectOption.ids.join(','),
+          optionalType: 1 // 自选库类型 0词 1曲
         }
-        console.log('删除')
         saveDelete(json).then(res => {
           this.$notify.success({
             title: '操作成功'
@@ -228,7 +236,8 @@ export default {
         type: type,
         fromOptionalId: this.form.id,
         toOptionalId: '',
-        musicIds: this.selectOption.ids.join(',')
+        workIds: this.selectOption.ids.join(','),
+        optionalType: 1 // 自选库类型 0词 1曲
       }
       this.dialogOption = {
         title: title,
@@ -270,10 +279,6 @@ export default {
           return false
         }
       })
-    },
-    // 删除歌曲
-    deleteMusic() {
-
     }
   }
 }
@@ -289,6 +294,7 @@ export default {
     display:flex;
     >.left{
 			flex:1;
+      height:100%;
 			overflow:hidden;
 			display:flex;
 			flex-direction: column;
