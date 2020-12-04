@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-10-28 22:53:06
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-02 16:43:36
+ * @LastEditTime: 2020-12-04 13:03:02
 -->
 <template>
   <div class="main-page">
@@ -292,6 +292,7 @@ export default {
     width:100%;
     height:100%;
     display:flex;
+    flex-direction: row ;
     >.left{
 			flex:1;
       height:100%;

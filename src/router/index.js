@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-02 15:07:39
+ * @LastEditTime: 2020-12-04 13:36:31
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -102,6 +102,26 @@ export const constantRoutes = [
         name: 'songCollectionNeedsLibrary',
         component: () => import('@/views/songCollection/needsLibrary/index'),
         meta: { title: '需求库管理' }
+      },
+      {
+        path: 'reservedLibrary',
+        component: () => import('@/views/songCollection/reservedLibrary/index'),
+        meta: { title: '预留作品管理' },
+        redirect: '/songCollection/reservedLibrary/songLibrary',
+        children: [
+          {
+            path: 'songLibrary',
+            name: 'reservedLibrarySongLibrary',
+            component: () => import('@/views/songCollection/reservedLibrary/songLibrary/index'),
+            meta: { title: '曲库管理' }
+          },
+          {
+            path: 'thesaurus',
+            name: 'reservedLibraryThesaurus',
+            component: () => import('@/views/songCollection/reservedLibrary/thesaurus/index'),
+            meta: { title: '词库管理' }
+          }
+        ]
       }
     ]
   },
