@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-04 13:36:31
+ * @LastEditTime: 2020-12-07 21:05:08
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -122,6 +122,18 @@ export const constantRoutes = [
             meta: { title: '词库管理' }
           }
         ]
+      },
+      {
+        path: 'dailyUpdate',
+        name: 'songCollectionDailyUpdate',
+        component: () => import('@/views/songCollection/dailyUpdate/index'),
+        meta: { title: '每日更新' }
+      },
+      {
+        path: 'priorityPush',
+        name: 'songCollectionPriorityPush',
+        component: () => import('@/views/songCollection/priorityPush/index'),
+        meta: { title: '优先推送' }
       }
     ]
   },

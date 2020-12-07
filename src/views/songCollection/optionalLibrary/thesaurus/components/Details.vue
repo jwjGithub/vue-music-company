@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-02 15:28:59
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-04 13:03:31
+ * @LastEditTime: 2020-12-07 20:31:39
 -->
 <template>
   <div class="main-page">
@@ -13,7 +13,7 @@
         <div class="header">
           <div class="left">
             <div class="tag mr10"></div>
-            <div class="title">词库内存歌曲</div>
+            <div class="title">{{ form.title }}</div>
           </div>
           <div class="center">
             <el-input v-model="queryForm.title" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>

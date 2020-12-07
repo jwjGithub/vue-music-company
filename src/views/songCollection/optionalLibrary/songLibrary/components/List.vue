@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-10-27 23:36:26
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-02 14:20:39
+ * @LastEditTime: 2020-12-07 20:29:45
 -->
 <template>
   <div class="main-page">
@@ -283,9 +283,9 @@ export default {
         createdTime: row.createdTime,
         updateTime: row.updateTime,
         sharingPersonNames: row.sharingPersonNames,
-        remark: row.remark
+        remark: row.remark,
+        title: row.baseName
       }
-      console.log(form, 'form')
       let json = {
         title: row.baseName + '-详情',
         form: form
