@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:13:18
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-07 21:21:02
+ * @LastEditTime: 2020-12-08 23:16:04
  */
 import request from '@/utils/request'
 
@@ -28,6 +28,14 @@ export function saveAdd(data) {
 export function saveEdit(data) {
   return request({
     url: `/comadmin/updateEmployee`,
+    method: 'post',
+    data: data
+  })
+}
+// 设置下拉框数据
+export function querySelect(data) {
+  return request({
+    url: `/company/dailyUpdateCondition/querySelect`,
     method: 'post',
     data: data
   })

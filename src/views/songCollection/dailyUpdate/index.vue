@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-07 21:50:54
+ * @LastEditTime: 2020-12-09 00:13:58
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -64,55 +64,49 @@
       @handleConfirm="handleConfirm"
     >
       <div class="pl24 pr24 pt24 pb24">
-        <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form ref="form" :model="form" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="类型：" prop="type">
-                <el-select v-model="form.type" clearable placeholder="请选择作品类型" style="width:100%;">
-                  <el-option label="全部" value=""></el-option>
-                  <el-option label="词曲" :value="1"></el-option>
-                  <el-option label="Beat/BGM" :value="2"></el-option>
-                  <el-option label="作曲" :value="3"></el-option>
+                <el-select v-model="form.type" clearable placeholder="请选择类型" style="width:100%;">
+                  <el-option v-for="(item,index) in typeList" :key="index" :label="item.des" :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="风格：" prop="realname">
-                <el-select v-model="form.type" clearable placeholder="请选择作品类型" style="width:100%;">
-                  <el-option label="全部" value=""></el-option>
-                  <el-option label="词曲" :value="1"></el-option>
-                  <el-option label="Beat/BGM" :value="2"></el-option>
+                <el-select v-model="form.style" clearable placeholder="请选择风格" style="width:100%;">
+                  <el-option v-for="(item,index) in styleList" :key="index" :label="item.des" :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="情感：" prop="password">
-                <el-select v-model="form.type" clearable placeholder="请选择作品类型" style="width:100%;">
-                  <el-option label="全部" value=""></el-option>
-                  <el-option label="词曲" :value="1"></el-option>
-                  <el-option label="Beat/BGM" :value="2"></el-option>
-                  <el-option label="作曲" :value="3"></el-option>
+                <el-select v-model="form.emotion" clearable placeholder="请选择情感" style="width:100%;">
+                  <el-option v-for="(item,index) in emotionList" :key="index" :label="item.des" :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="价格区间：">
-                <el-input v-model="form.price" style="width:47%;"></el-input> -
-                <el-input v-model="form.price2" style="width:47%;"></el-input>
+                <el-input v-model="form.priceRangePre" style="width:47%;"></el-input> -
+                <el-input v-model="form.priceRangeSuf" style="width:47%;"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="作者：" prop="mobile">
-                <el-input v-model="form.mobile" style="width:100%;"></el-input>
+                <el-select v-model="form.author" clearable placeholder="请选择作者" style="width:100%;">
+                  <el-option v-for="(item,index) in authorList" :key="index" :label="item.des" :value="item.code"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item label="">
                 <p>
-                  <el-radio v-model="form.radioVal" label="1">筛选包含以上任意条件的作品</el-radio>
+                  <el-radio v-model="form.andOr" label="1">筛选包含以上任意条件的作品</el-radio>
                 </p>
                 <p>
-                  <el-radio v-model="form.radioVal" label="2">筛选包含以上所以条件的作品</el-radio>
+                  <el-radio v-model="form.andOr" label="2">筛选包含以上所以条件的作品</el-radio>
                 </p>
               </el-form-item>
             </el-col>
@@ -127,32 +121,13 @@
 import {
   getList,
   saveAdd,
-  saveEdit
-} from '@/api/admin/lowerAccount'
+  saveEdit,
+  querySelect
+} from '@/api/songCollection/dailyUpdate'
 export default {
   name: 'List',
   components: {},
   data() {
-    let validatePhone = (rule, value, callback) => {
-      let reg = /^1[0-9]{10}$/
-      if (value === '') {
-        callback(new Error('请输入手机号'))
-      } else if (!reg.test(value)) {
-        callback(new Error('请输入正确的手机号'))
-      } else {
-        callback()
-      }
-    }
-    let validateEmail = (rule, value, callback) => {
-      let reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-      if (value === '') {
-        callback(new Error('请输入邮箱'))
-      } else if (!reg.test(value)) {
-        callback(new Error('请输入正确的邮箱格式'))
-      } else {
-        callback()
-      }
-    }
     return {
       // 选择对象
       selectOption: {
@@ -166,6 +141,10 @@ export default {
       total: 0,
       loading: false,
       dataList: [],
+      typeList: [], // 类型
+      styleList: [], // 风格
+      emotionList: [], // 情感
+      authorList: [], // 作者
       queryForm: {
         // realName: '', // 姓名
         page: 1, // 当前页
@@ -177,24 +156,7 @@ export default {
         show: false,
         loading: false
       },
-      form: {},
-      rules: {
-        type: [
-          { required: true, message: '请选择作品类型', trigger: 'blur' }
-        ],
-        price: [
-          { required: true, message: '请输入姓名', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ],
-        mobile: [
-          { required: true, validator: validatePhone, trigger: 'blur' }
-        ],
-        email: [
-          { required: true, validator: validateEmail, trigger: 'blur' }
-        ]
-      }
+      form: {}
     }
   },
   created() {
@@ -212,20 +174,32 @@ export default {
         this.loading = false
       })
     },
+    // 查询设置弹窗下拉框数据
+    getQuerySelect() {
+      querySelect().then(res => {
+        this.typeList = res.data.type || []
+        this.styleList = res.data.style || []
+        this.emotionList = res.data.emotion || []
+        this.authorList = res.data.author || []
+      })
+    },
     // 打开设置窗口
     openSetUp() {
+      this.getQuerySelect()
       this.dialogOption = {
         title: '设置筛选条件',
         show: true,
         loading: false
       }
       this.form = {
-        type: '', // 类型
-        username: '', // 用户名
-        price: '', // 姓名
-        price2: '', // 密码
-        mobile: '', // 手机号
-        radioVal: ''
+        id: '',	// 设置ID，传此值更新，不传新增
+        type: '', // 类型，多个用逗号隔开
+        style: '',	// 风格，多个用逗号隔开
+        emotion: '', // 情感，多个用逗号隔开
+        author: '', // 作者，多个用逗号隔开
+        priceRangePre: '', //	价格区间最小值
+        priceRangeSuf: '', // 价格区间最大值
+        andOr: '1'// 全或一 0表示包含全部条件 1表示任意一个条件
       }
       this.resetForm('form')
     },
