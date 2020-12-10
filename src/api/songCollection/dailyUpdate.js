@@ -4,30 +4,14 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:13:18
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-08 23:16:04
+ * @LastEditTime: 2020-12-10 20:52:45
  */
 import request from '@/utils/request'
 
 // 分页查询
 export function getList(data) {
   return request({
-    url: '/comadmin/getEmployeeExceptAdmin',
-    method: 'post',
-    data: data
-  })
-}
-// 添加业务人员账号(信息设置)
-export function saveAdd(data) {
-  return request({
-    url: '/comadmin/addEmployee',
-    method: 'post',
-    data: data
-  })
-}
-// 编辑保存业务人员账号(信息设置)
-export function saveEdit(data) {
-  return request({
-    url: `/comadmin/updateEmployee`,
+    url: '/company/dailyUpdateCondition/queryDailyUpdate',
     method: 'post',
     data: data
   })
@@ -36,6 +20,22 @@ export function saveEdit(data) {
 export function querySelect(data) {
   return request({
     url: `/company/dailyUpdateCondition/querySelect`,
+    method: 'post',
+    data: data
+  })
+}
+// 每日更新条件设置初始数据
+export function querySingle(data) {
+  return request({
+    url: '/company/dailyUpdateCondition/querySingle',
+    method: 'post',
+    data: data
+  })
+}
+// 修改每日更新条件设置
+export function saveEdit(data) {
+  return request({
+    url: '/company/dailyUpdateCondition/set',
     method: 'post',
     data: data
   })

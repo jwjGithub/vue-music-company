@@ -1,8 +1,8 @@
 <!--
  * @Date: 2020-09-30 17:23:27
  * @Description:
- * @LastEditors: JWJ
- * @LastEditTime: 2020-10-27 23:10:47
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-10 21:13:56
  * @FilePath: \vue-music-company\src\layout\components\Sidebar\SidebarItem.vue
 -->
 <template>
@@ -10,9 +10,9 @@
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <div class="menu-item-gradient">
-            <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
-          </div>
+          <!-- <div class="menu-item-gradient"> -->
+          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <!-- </div> -->
         </el-menu-item>
       </app-link>
     </template>

@@ -85,7 +85,7 @@
                   }
                   .el-submenu__icon-arrow{
                     font-size:14px;
-                    color:$menuBg;
+                    // color:$menuBg;
                     margin-top:-5px;
                   }
                 }
@@ -97,9 +97,9 @@
                       filter: drop-shadow(#FFF 80px 0);
                       transform: translateX(-80px);
                     }
-                    // .el-submenu__icon-arrow{
-                    //   color:$theme-color;
-                    // }
+                    .el-submenu__icon-arrow{
+                      color:$menuBg;
+                    }
                   }
                 }
                 >.el-menu{
@@ -113,7 +113,7 @@
                         font-size:14px;
                         display:flex;
                         align-items:center;
-                        padding-left:20px !important;
+                        // padding-left:20px !important;
                         padding-right:20px !important;
                         color:#333 !important;
                         >.menu-item-gradient{

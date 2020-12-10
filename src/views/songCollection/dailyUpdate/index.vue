@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-09 00:13:58
+ * @LastEditTime: 2020-12-10 21:10:05
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -15,6 +15,13 @@
           <div class="title">每日更新</div>
         </div>
         <div class="right pr30">
+          <el-select v-model="queryForm.type" clearable placeholder="请选择类型" style="width:100%;" size="mini">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="词曲" value="1"></el-option>
+            <el-option label="Beat/Bgm" value="2"></el-option>
+            <el-option label="作曲" value="3"></el-option>
+          </el-select>
+          <el-button type="primary" size="mini" class="ml10" :loading="loading" @click="getList">查询</el-button>
           <el-button type="primary" size="mini" @click="openSetUp">设置</el-button>
         </div>
       </div>
@@ -68,21 +75,21 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="类型：" prop="type">
-                <el-select v-model="form.type" clearable placeholder="请选择类型" style="width:100%;">
+                <el-select v-model="form.type" multiple clearable placeholder="请选择类型" style="width:100%;">
                   <el-option v-for="(item,index) in typeList" :key="index" :label="item.des" :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="风格：" prop="realname">
-                <el-select v-model="form.style" clearable placeholder="请选择风格" style="width:100%;">
+                <el-select v-model="form.style" multiple clearable placeholder="请选择风格" style="width:100%;">
                   <el-option v-for="(item,index) in styleList" :key="index" :label="item.des" :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="情感：" prop="password">
-                <el-select v-model="form.emotion" clearable placeholder="请选择情感" style="width:100%;">
+                <el-select v-model="form.emotion" multiple clearable placeholder="请选择情感" style="width:100%;">
                   <el-option v-for="(item,index) in emotionList" :key="index" :label="item.des" :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
@@ -95,8 +102,8 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="作者：" prop="mobile">
-                <el-select v-model="form.author" clearable placeholder="请选择作者" style="width:100%;">
-                  <el-option v-for="(item,index) in authorList" :key="index" :label="item.des" :value="item.code"></el-option>
+                <el-select v-model="form.author" multiple clearable placeholder="请选择作者" style="width:100%;">
+                  <el-option v-for="(item,index) in authorList" :key="index" :label="item.des" :value="item.userId"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -120,9 +127,9 @@
 <script>
 import {
   getList,
-  saveAdd,
   saveEdit,
-  querySelect
+  querySelect,
+  querySingle
 } from '@/api/songCollection/dailyUpdate'
 export default {
   name: 'List',
@@ -146,7 +153,7 @@ export default {
       emotionList: [], // 情感
       authorList: [], // 作者
       queryForm: {
-        // realName: '', // 姓名
+        type: '', // 作品类型
         page: 1, // 当前页
         limit: 20 // 每页条数
       },
@@ -191,16 +198,19 @@ export default {
         show: true,
         loading: false
       }
-      this.form = {
-        id: '',	// 设置ID，传此值更新，不传新增
-        type: '', // 类型，多个用逗号隔开
-        style: '',	// 风格，多个用逗号隔开
-        emotion: '', // 情感，多个用逗号隔开
-        author: '', // 作者，多个用逗号隔开
-        priceRangePre: '', //	价格区间最小值
-        priceRangeSuf: '', // 价格区间最大值
-        andOr: '1'// 全或一 0表示包含全部条件 1表示任意一个条件
-      }
+      querySingle().then(res => {
+        let data = res.data || {}
+        this.form = {
+          id: data.id,	// 设置ID，传此值更新，不传新增
+          type: data.type && data.type.split(','), // 类型，多个用逗号隔开
+          style: data.style && data.style.split(','),	// 风格，多个用逗号隔开
+          emotion: data.emotion && data.emotion.split(','), // 情感，多个用逗号隔开
+          author: data.author && data.author.split(',').map(Number), // 作者，多个用逗号隔开
+          priceRangePre: data.priceRangePre, //	价格区间最小值
+          priceRangeSuf: data.priceRangeSuf, // 价格区间最大值
+          andOr: data.andOr// 全或一 0表示包含全部条件 1表示任意一个条件
+        }
+      })
       this.resetForm('form')
     },
     // 打开添加自选库窗口
@@ -214,47 +224,21 @@ export default {
       // this.form = JSON.parse(JSON.stringify(row))
       // this.resetForm('form')
     },
-    // 新增保存
-    saveAdd() {
-      // this.dialogOption.loading = true
-      // saveAdd(this.form).then(res => {
-      //   this.$notify.success({
-      //     title: '保存成功'
-      //   })
-      //   this.getList()
-      //   this.dialogOption.show = false
-      //   this.dialogOption.loading = false
-      // }).catch(e => {
-      //   this.dialogOption.loading = false
-      // })
-    },
-    // 编辑保存
-    saveEdit() {
-      // this.dialogOption.loading = true
-      // saveEdit(this.form).then(res => {
-      //   this.$notify.success({
-      //     title: '保存成功'
-      //   })
-      //   this.getList()
-      //   this.dialogOption.show = false
-      //   this.dialogOption.loading = false
-      // }).catch(e => {
-      //   this.dialogOption.loading = false
-      // })
-    },
-    // 保存回调
+    // 保存每日更新设置
     handleConfirm() {
-      // this.$refs['form'].validate((valid) => {
-      //   if (valid) {
-      //     if (this.form.userId) {
-      //       this.saveEdit()
-      //     } else {
-      //       this.saveAdd()
-      //     }
-      //   } else {
-      //     return false
-      //   }
-      // })
+      this.dialogOption.loading = true
+      this.form.type = this.form.type.join(',')
+      this.form.style = this.form.style.join(',')
+      this.form.emotion = this.form.emotion.join(',')
+      this.form.author = this.form.author.join(',')
+      saveEdit(this.form).then(res => {
+        this.$notify.success({ title: '保存成功' })
+        this.getList()
+        this.dialogOption.show = false
+        this.dialogOption.loading = false
+      }).catch(e => {
+        this.dialogOption.loading = false
+      })
     },
     // 预留
     openReserve(row) {
