@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-10 21:10:05
+ * @LastEditTime: 2020-12-11 23:02:48
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -32,18 +32,32 @@
             :data="dataList"
             stripe
             style="width: 100%"
+            @selection-change="handleSelectionChange"
           >
+            <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column width="70" label="序号">
               <template slot-scope="scope">{{ scope.$index + 1 }}</template>
             </el-table-column>
-            <el-table-column prop="username" min-width="150" label="名称"></el-table-column>
-            <el-table-column prop="realname" min-width="150" label="分类"></el-table-column>
+            <el-table-column prop="title" min-width="150" label="名称"></el-table-column>
+            <el-table-column prop="typeDes" min-width="150" label="分类"></el-table-column>
             <el-table-column prop="mobile" min-width="150" label="作品标签"></el-table-column>
-            <el-table-column prop="email" min-width="150" label="曲作者"></el-table-column>
-            <el-table-column prop="label" min-width="150" label="词作者"></el-table-column>
-            <el-table-column prop="label" min-width="150" label="制作人"></el-table-column>
-            <el-table-column prop="label" min-width="150" label="上传者"></el-table-column>
-            <el-table-column prop="label" min-width="150" label="报价"></el-table-column>
+            <el-table-column min-width="150" label="曲作者" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ setComposers(scope.row.composers) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column min-width="150" label="词作者" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ setComposers(scope.row.lyricists) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column min-width="150" label="制作人" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ setComposers(scope.row.producers) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="creator" min-width="150" label="上传者"></el-table-column>
+            <el-table-column prop="price" min-width="150" label="报价"></el-table-column>
             <el-table-column label="操作" fixed="right" width="180">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" @click="openAdd(scope.row)">添加</el-button>
@@ -122,6 +136,29 @@
         </el-form>
       </div>
     </mus-dialog>
+    <!-- 添加到自选库 弹窗 -->
+    <mus-dialog
+      :title="dialogZxl.title"
+      :loading="dialogZxl.loading"
+      :is-show="dialogZxl.show"
+      :width="'500px'"
+      @handleClose="dialogZxl.show = false"
+      @handleConfirm="optionalSave"
+    >
+      <div class="pl24 pr24 pt24 pb24">
+        <el-form ref="zxkForm" :model="zxkForm" :rules="rules" label-width="100px">
+          <el-row :gutter="20">
+            <el-col :span="20">
+              <el-form-item label="自选库：" prop="optionalId">
+                <el-select v-model="zxkForm.optionalId" clearable placeholder="请选择类型" style="width:100%;">
+                  <el-option v-for="(item,index) in zxkList" :key="index" :label="item.baseName" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </mus-dialog>
   </div>
 </template>
 <script>
@@ -129,7 +166,10 @@ import {
   getList,
   saveEdit,
   querySelect,
-  querySingle
+  querySingle,
+  optionalList,
+  optionalSave,
+  addReservation
 } from '@/api/songCollection/dailyUpdate'
 export default {
   name: 'List',
@@ -155,7 +195,7 @@ export default {
       queryForm: {
         type: '', // 作品类型
         page: 1, // 当前页
-        limit: 20 // 每页条数
+        limit: 10 // 每页条数
       },
       // 默认弹窗对象
       dialogOption: {
@@ -163,13 +203,34 @@ export default {
         show: false,
         loading: false
       },
-      form: {}
+      form: {},
+      zxkList: [], // 自选库列表
+      // 默认弹窗对象
+      dialogZxl: {
+        title: '',
+        show: false,
+        loading: false
+      },
+      zxkForm: {
+        optionalId: ''
+      }, // 自选库表单
+      rules: {
+        optionalId: [
+          { required: true, message: '请选择自选库', trigger: 'change' }
+        ]
+      }
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.selectOption.ids = selection.map(item => item.id)
+      this.selectOption.single = selection.length !== 1
+      this.selectOption.multiple = !selection.length
+    },
     // 查询列表
     getList() {
       this.loading = true
@@ -180,6 +241,16 @@ export default {
       }).catch(() => {
         this.loading = false
       })
+    },
+    // 设置作者
+    setComposers(row) {
+      let arr = []
+      row && row.forEach(item => {
+        if (item.name) {
+          arr.push(item.name)
+        }
+      })
+      return arr.join(',')
     },
     // 查询设置弹窗下拉框数据
     getQuerySelect() {
@@ -213,17 +284,6 @@ export default {
       })
       this.resetForm('form')
     },
-    // 打开添加自选库窗口
-    openAdd(row) {
-      // this.dialogOption = {
-      //   title: '编辑账号',
-      //   show: true,
-      //   loading: false
-      // }
-      // row.password = ''
-      // this.form = JSON.parse(JSON.stringify(row))
-      // this.resetForm('form')
-    },
     // 保存每日更新设置
     handleConfirm() {
       this.dialogOption.loading = true
@@ -240,9 +300,60 @@ export default {
         this.dialogOption.loading = false
       })
     },
+    // 查询自选库列表
+    optionalList() {
+      optionalList({ optionalType: 1 }).then(res => {
+        this.zxkList = res.data || []
+      })
+    },
+    // 打开添加自选库窗口
+    openAdd(row) {
+      this.optionalList()
+      this.dialogZxl = {
+        title: '添加到自选库',
+        show: true,
+        loading: false
+      }
+      this.zxkForm = {
+        // worksId: type === 1 ? row.id : this.selectOption.ids.join(','), // 作品ID数组 [1,2]
+        worksId: row.id, // 作品ID数组 [1,2]
+        optionalId: '', // 自选库ID
+        optionalType: row.type// 自选库类型 0词 1曲
+      }
+      this.resetForm('zxkForm')
+    },
+    // 添加到自选库保存
+    optionalSave() {
+      this.$refs['zxkForm'].validate((valid) => {
+        if (valid) {
+          this.dialogZxl.loading = true
+          optionalSave(this.zxkForm).then(res => {
+            this.$notify.success({ title: '保存成功' })
+            this.getList()
+            this.dialogZxl.show = false
+            this.dialogZxl.loading = false
+          }).catch(e => {
+            this.dialogZxl.loading = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
     // 预留
     openReserve(row) {
-      this.$notify.success({ title: '预留' })
+      this.$confirm('预留该作品', '作品预留', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning'
+      }).then(() => {
+        addReservation({ worksId: row.id }).then(res => {
+          this.$notify.success({
+            title: '操作成功'
+          })
+          this.getList()
+        })
+      }).catch(() => {})
     }
   }
 }

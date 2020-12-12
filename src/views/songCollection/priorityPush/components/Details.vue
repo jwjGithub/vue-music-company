@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:02:03
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-10 22:07:04
+ * @LastEditTime: 2020-12-11 21:15:26
 -->
 <template>
   <div class="main-page">
@@ -141,7 +141,7 @@ export default {
         optionalType: '', // 需求库类型 0词true 1曲false
         // keyword: '', // 关键字
         page: 1, // 当前页
-        limit: 20 // 每页条数
+        limit: 10 // 每页条数
       },
       dialogOption: {
         title: '',

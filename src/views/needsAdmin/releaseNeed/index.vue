@@ -2,8 +2,8 @@
  * @Description: 发布需求
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
- * @LastEditors: JWJ
- * @LastEditTime: 2020-11-30 11:12:00
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-12 11:49:17
 -->
 <template>
   <div class="main-page needsAdmin-releaseNeed">
@@ -58,7 +58,7 @@
             <img src="@/assets/images/needsAdmin/icon_success.png">
           </div>
           <div class="footer-btn mt50">
-            <div class="mb20">恭喜发布成功！</div>
+            <div class="mb20">{{ form.status == 1 ? '已保存到草稿箱！' : '恭喜发布成功！' }}</div>
             <el-button type="primary" class="mt60" @click="Go('/needsAdmin/list')">进入需求库</el-button>
             <el-button type="primary" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
           </div>

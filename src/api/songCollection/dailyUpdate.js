@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:13:18
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-10 20:52:45
+ * @LastEditTime: 2020-12-11 22:56:11
  */
 import request from '@/utils/request'
 
@@ -36,6 +36,30 @@ export function querySingle(data) {
 export function saveEdit(data) {
   return request({
     url: '/company/dailyUpdateCondition/set',
+    method: 'post',
+    data: data
+  })
+}
+// 自选库列表
+export function optionalList(data) {
+  return request({
+    url: '/company/dailyUpdateCondition/getOptionalList',
+    method: 'post',
+    data: data
+  })
+}
+// 添加自选库保存
+export function optionalSave(data) {
+  return request({
+    url: '/company/dailyUpdateCondition/addWorksToOptional',
+    method: 'post',
+    data: data
+  })
+}
+// 作品预留
+export function addReservation(data) {
+  return request({
+    url: '/company/dailyUpdateCondition/addReservation',
     method: 'post',
     data: data
   })

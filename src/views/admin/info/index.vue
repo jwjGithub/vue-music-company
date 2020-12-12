@@ -2,8 +2,8 @@
  * @Description: 公司信息管理
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
- * @LastEditors: JWJ
- * @LastEditTime: 2020-11-30 11:18:48
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-11 21:35:24
 -->
 <template>
   <div class="main-page admin-info">
@@ -46,6 +46,7 @@
                       <el-option label="合伙企业" :value="6" />
                     </el-select>
                     <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="companyNature = true">取消</el-button>
                   </span>
                   <i v-if="companyNature" class="icon icon-edit pointer" @click="editCompanyType"></i>
                 </div>
@@ -57,6 +58,7 @@
                   <span v-else>
                     <el-input v-model="companyInfo.address" class="w20"></el-input>
                     <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="addressClick = true">取消</el-button>
                   </span>
                   <i v-if="addressClick" class="icon icon-edit pointer" @click="editAddress"></i>
                 </div>
@@ -68,6 +70,7 @@
                   <span v-else>
                     <el-input v-model="companyInfo.url" class="w20"></el-input>
                     <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="urlClick = true">取消</el-button>
                   </span>
                   <i v-if="urlClick" class="icon icon-edit pointer ml10" @click="editUrl"></i>
                 </div>
@@ -94,6 +97,7 @@
                   <div>
                     <i v-if="introductionClick" class="icon icon-edit pointer ml10" @click="editIntroduction"></i>
                     <el-button v-else type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button v-if="!introductionClick" type="primary" class="ml10" @click="introductionClick = true">取消</el-button>
                   </div>
                 </div>
               </div>

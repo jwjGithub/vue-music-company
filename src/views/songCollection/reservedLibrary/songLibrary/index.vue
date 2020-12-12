@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-04 13:29:43
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-04 14:24:42
+ * @LastEditTime: 2020-12-11 23:05:30
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -20,6 +20,7 @@
             <el-option label="词曲" :value="1"></el-option>
             <el-option label="Beat/BGM" :value="2"></el-option>
             <el-option label="作曲" :value="3"></el-option>
+            <el-option label="作词" :value="4"></el-option>
           </el-select>
           <el-input v-model="queryForm.title" class="search-input w20" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
           <el-button type="primary" size="mini" class="ml10" :loading="loading" @click="getList">查询</el-button>

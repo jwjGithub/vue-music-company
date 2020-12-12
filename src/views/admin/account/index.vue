@@ -2,8 +2,8 @@
  * @Description: 管理员账号管理
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
- * @LastEditors: JWJ
- * @LastEditTime: 2020-10-31 16:25:30
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-12 11:58:24
 -->
 <template>
   <div class="main-page admin-account">
@@ -83,7 +83,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item v-if="passwordForm.type" label="手机验证码：" prop="vercode">
+              <el-form-item v-if="passwordForm.type" prop="vercode">
+                <template v-slot:label>
+                  {{ passwordForm.type === 'mobile' ? '手机验证码：' : '邮箱验证码：' }}
+                </template>
                 <div class="w30 text-left">
                   <el-input v-model="passwordForm.vercode" class="w15"></el-input>
                   <el-button v-loading="passLoading" type="primary" class="btn-success w14 ml10" :disabled="passSendCodeType" @click="getPassSendCode">{{ passSendCodeCount }}</el-button>
