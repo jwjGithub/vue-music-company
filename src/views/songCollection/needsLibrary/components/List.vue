@@ -111,15 +111,14 @@ export default {
       let form = {
         id: row.id,
         optionalType: row.optionalType,
-        name: row.title
+        name: row.optionalName
         // createdTime: row.createdTime,
         // updateTime: row.updateTime,
         // sharingPersonNames: row.sharingPersonNames,
         // remark: row.remark
       }
-      console.log(form, 'form')
       let json = {
-        title: row.title,
+        title: row.optionalName,
         form: form
       }
       this.$emit('addTab', json)

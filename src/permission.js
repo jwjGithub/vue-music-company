@@ -1,8 +1,8 @@
 /*
  * @Date: 2020-09-30 17:23:27
  * @Description:
- * @LastEditors: JWJ
- * @LastEditTime: 2020-10-19 20:17:02
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-12 14:34:46
  * @FilePath: \vue-music-company\src\permission.js
  */
 import router from './router'
@@ -46,7 +46,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // 否则全部重定向到曲库
-      window.location = 'http://47.94.21.246:9081/'
+      window.location = 'http://47.94.21.246:9081/#/?logOut=Y'
       // next(`/login?redirect=${to.path}`)
       NProgress.done()
     }

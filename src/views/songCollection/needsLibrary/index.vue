@@ -1,8 +1,8 @@
 <!--
  * @Date: 2020-10-21 17:49:06
  * @Description: 需求库
- * @LastEditors: JWJ
- * @LastEditTime: 2020-11-22 20:30:34
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-12 14:25:35
 -->
 <template>
   <div class="main-page songCollection-needsLibrary">
@@ -50,6 +50,7 @@ export default {
   methods: {
     // 添加tab页
     addTab(row) {
+      console.log(row, 'row')
       let newTabName = row.title + row.form.id
       let bl = true
       for (let i = 0, len = this.tabList.length; i < len; i++) {
