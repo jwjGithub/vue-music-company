@@ -1,14 +1,15 @@
 /*
  * @Date: 2020-09-30 17:23:27
  * @Description:
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-12 14:34:46
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-12-15 10:54:33
  * @FilePath: \vue-music-company\src\permission.js
  */
 import router from './router'
 import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
+import { goMusic } from '@/utils/index' // get token from cookie
 import { getToken, setToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
@@ -46,7 +47,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // 否则全部重定向到曲库
-      window.location = 'http://47.94.21.246:9081/#/?logOut=Y'
+      goMusic('logOut=Y')
       // next(`/login?redirect=${to.path}`)
       NProgress.done()
     }

@@ -137,3 +137,13 @@ export function handleTree(data, id, parentId, children, rootId) {
   })
   return treeData !== '' ? treeData : data
 }
+
+// 调转到music系统
+export function goMusic(query) {
+  // let url = 'http://192.168.3.18:9081/#/?'
+  let url = 'http://47.94.21.246:9081/#/?'
+  if (query) {
+    url += query
+  }
+  window.location = url
+}

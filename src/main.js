@@ -1,3 +1,10 @@
+/*
+ * @Date: 2020-09-30 17:23:27
+ * @Description:
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-12-15 10:51:31
+ * @FilePath: \vue-music-company\src\main.js
+ */
 import Vue from 'vue'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
@@ -17,7 +24,7 @@ import '@/permission' // permission control
 
 // 全局方法引入
 import { getToken } from '@/utils/auth'
-import { parseTime, resetForm, handleTree } from '@/utils/index'
+import { parseTime, resetForm, handleTree, goMusic } from '@/utils/index'
 
 // 全局组件引入
 import Pagination from '@/components/Pagination'
@@ -28,6 +35,7 @@ Vue.prototype.getToken = getToken
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
 Vue.prototype.handleTree = handleTree
+Vue.prototype.goMusic = goMusic
 
 // 全局组件挂载
 Vue.component('Pagination', Pagination)

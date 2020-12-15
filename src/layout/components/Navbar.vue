@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-28 22:09:45
+ * @LastEditTime: 2020-12-15 11:07:16
 -->
 <template>
   <div class="navbar layout-navbar-page">
@@ -75,7 +75,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('user/LogOut').then(() => {
-          location.reload()
+          this.goMusic('logOut=Y')
+          // location.reload()
         })
       })
     }

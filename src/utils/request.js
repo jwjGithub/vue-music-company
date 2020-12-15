@@ -2,14 +2,15 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2020-10-26 21:51:28
+ * @LastEditTime: 2020-12-15 11:12:04
  * @FilePath: \vue-music-company\src\utils\request.js
  */
 import axios from 'axios'
-// import router from '@/router'
+import router from '@/router'
 import { Notification, MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken } from '@/utils/auth'
+import { goMusic } from '@/utils/index'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
@@ -25,7 +26,6 @@ service.interceptors.request.use(
     if (getToken()) {
       config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
       // 过滤分页数字
-      console.log(config.data, 'config.data')
       if (config.data && !(config.data instanceof FormData)) {
         let data = JSON.parse(JSON.stringify(config.data))
         if (data.page) {
@@ -50,9 +50,10 @@ service.interceptors.request.use(
             type: 'warning'
           }
         ).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
-          })
+          goMusic('logOut=Y')
+          // store.dispatch('user/resetToken').then(() => {
+          //   location.reload() // 为了重新实例化vue-router对象 避免bug
+          // })
         })
         return Promise.reject(new Error('登录已过期'))
       }
@@ -77,9 +78,10 @@ service.interceptors.response.use(res => {
         type: 'warning'
       }
     ).then(() => {
-      store.dispatch('user/resetToken').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      })
+      goMusic('logOut=Y')
+      // store.dispatch('user/resetToken').then(() => {
+      //   location.reload() // 为了重新实例化vue-router对象 避免bug
+      // })
     })
     return Promise.reject('error')
   } else if (code !== 0) {
