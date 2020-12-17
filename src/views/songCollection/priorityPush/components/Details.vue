@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:02:03
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-11 21:15:26
+ * @LastEditTime: 2020-12-17 21:06:56
 -->
 <template>
   <div class="main-page">
@@ -25,12 +25,8 @@
             >
             </el-switch>
           </div>
-          <div class="center">
-            <el-input v-model="queryForm.keyword" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
-            <el-button type="primary" size="mini" class="ml10 mr20" :loading="loading" @click="getList">查询</el-button>
-          </div>
           <div class="right pr30">
-            <el-button type="primary" size="mini" :disabled="!selectOption.multiple" @click="openAdd(2,null)">添加到自选库</el-button>
+            <!-- <el-button type="primary" size="mini" :disabled="!selectOption.multiple" @click="openAdd(2,null)">添加到自选库</el-button> -->
           </div>
         </div>
         <div class="content">
@@ -40,29 +36,32 @@
               :data="dataList"
               stripe
               style="width: 100%"
-              @selection-change="handleSelectionChange"
             >
-              <el-table-column type="selection" width="55" align="center"></el-table-column>
-              <el-table-column prop="title" min-width="150" label="序号"></el-table-column>
+              <el-table-column width="80" label="序号">
+                <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+              </el-table-column>
               <el-table-column prop="authorName" min-width="150" label="名称"></el-table-column>
-              <el-table-column v-if="!switchType" prop="sharingPersonNames" min-width="150" label="分类"></el-table-column>
+              <el-table-column prop="sharingPersonNames" min-width="150" label="分类"></el-table-column>
               <el-table-column prop="price" min-width="150" label="作品标签"></el-table-column>
               <el-table-column v-if="!switchType" prop="description" min-width="150" label="曲作者"></el-table-column>
-              <el-table-column prop="description" min-width="150" label="词作者"></el-table-column>
+              <el-table-column v-if="switchType" prop="description" min-width="150" label="词作者"></el-table-column>
               <el-table-column prop="description" min-width="150" label="报价"></el-table-column>
-              <el-table-column label="添加到自选库" fixed="right" width="180">
+              <el-table-column prop="description" min-width="150" label="发布时间"></el-table-column>
+              <el-table-column prop="description" min-width="150" label="公开发布时间"></el-table-column>
+              <el-table-column label="操作" fixed="right" width="180">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="text" @click="openAdd(1,scope.row)">添加</el-button>
+                  <el-button size="mini" type="text" @click="openAdd(scope.row)">添加到自选库</el-button>
+                  <el-button size="mini" type="text" @click="openReserve(scope.row)">预留</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <pagination
+            <!-- <pagination
               v-show="total>0"
               :total="Number(total)"
               :page.sync="queryForm.page"
               :limit.sync="queryForm.limit"
               @pagination="getList"
-            />
+            /> -->
           </el-scrollbar>
         </div>
       </div>
@@ -104,7 +103,7 @@ import {
   getList,
   getOptionalList,
   addToOptional
-} from '@/api/songCollection/needsLibrary/details'
+} from '@/api/songCollection/priorityPush/details'
 export default {
   name: 'Details',
   components: {
@@ -119,29 +118,26 @@ export default {
   },
   data() {
     return {
-      tableKey: 0,
       // 选择对象
-      selectOption: {
-        // 选中数组
-        ids: [],
-        // 非单个禁用
-        single: true,
-        // 非多个禁用
-        multiple: true
-      },
-      total: 0,
+      // selectOption: {
+      //   // 选中数组
+      //   ids: [],
+      //   // 非单个禁用
+      //   single: true,
+      //   // 非多个禁用
+      //   multiple: true
+      // },
+      // total: 0,
       loading: false,
       dataList: [],
       zxkList: [], // 自选库列表
-      userList: [], // 用户列表
       title: '', // 标题
-      switchType: '', // 需求库类型 0词true 1曲false
+      switchType: false, // 需求库类型 0词true 1曲false
       queryForm: {
-        id: '', // 需求库ID
-        optionalType: '', // 需求库类型 0词true 1曲false
-        // keyword: '', // 关键字
-        page: 1, // 当前页
-        limit: 10 // 每页条数
+        // id: '', // 需求库ID
+        optionalType: 1 // 需求库类型 0词true 1曲false
+        // page: 1, // 当前页
+        // limit: 10 // 每页条数
       },
       dialogOption: {
         title: '',
@@ -160,15 +156,12 @@ export default {
   },
   created() {
     this.title = this.form.name
-    this.switchType = this.form.optionalType === 0
-    this.queryForm.optionalType = this.form.optionalType
     this.getList()
   },
   methods: {
     // 查询列表
     getList() {
       this.loading = true
-      this.queryForm.id = this.form.id
       getList(this.queryForm).then(res => {
         this.dataList = res.data || []
         this.total = res.count || 0
@@ -185,11 +178,11 @@ export default {
       this.getList()
     },
     // 列表多选框
-    handleSelectionChange(selection) {
-      this.selectOption.ids = selection.map(item => item.id)
-      this.selectOption.single = selection.length !== 1
-      this.selectOption.multiple = !selection.length
-    },
+    // handleSelectionChange(selection) {
+    //   this.selectOption.ids = selection.map(item => item.id)
+    //   this.selectOption.single = selection.length !== 1
+    //   this.selectOption.multiple = !selection.length
+    // },
     // 打开删除 type:1 单个 type:2 批量
     // openDelete(type, row) {
     //   let title = type === 1 ? '单个' : '批量'
@@ -250,6 +243,21 @@ export default {
           return false
         }
       })
+    },
+    // 预留
+    openReserve(row) {
+      this.$confirm('预留该作品', '作品预留', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning'
+      }).then(() => {
+        // addReservation({ worksId: row.id }).then(res => {
+        //   this.$notify.success({
+        //     title: '操作成功'
+        //   })
+        //   this.getList()
+        // })
+      }).catch(() => {})
     }
   }
 }

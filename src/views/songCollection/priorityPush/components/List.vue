@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:01:42
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-07 21:52:42
+ * @LastEditTime: 2020-12-17 20:51:38
 -->
 <template>
   <div class="main-page">
@@ -15,8 +15,8 @@
           <div class="title">优先推送作者</div>
         </div>
         <div class="right pr30">
-          <el-input v-model="queryForm.title" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input>
-          <el-button type="primary" size="mini" class="ml10" :loading="loading" @click="getList">查询</el-button>
+          <!-- <el-input v-model="queryForm.title" class="search-input w30" size="mini" placeholder="请输入关键字" @keyup.enter.native="getList"></el-input> -->
+          <el-button type="primary" size="mini" class="ml10" :loading="loading" @click="openAdd">添加作者</el-button>
         </div>
       </div>
       <div class="content">
@@ -27,18 +27,22 @@
             stripe
             style="width: 100%"
           >
-            <el-table-column type="selection" width="55" align="center"></el-table-column>
-            <el-table-column prop="title" min-width="150" label="名称">
+            <el-table-column width="80" label="序号">
+              <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+            </el-table-column>
+            <el-table-column min-width="150" label="作者">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="openDetails(scope.row)">{{ scope.row.optionalName }}</el-button>
+                <el-button size="mini" type="text" @click="openDetails(scope.row)">{{ scope.row.realName }}({{ scope.row.stageName }})</el-button>
               </template>
             </el-table-column>
-            <el-table-column prop="title" min-width="150" label="关联需求"></el-table-column>
-            <el-table-column prop="optionalTypeDes" min-width="150" label="类型"></el-table-column>
-            <el-table-column prop="creatorName" min-width="150" label="创建人"></el-table-column>
-            <el-table-column prop="" min-width="150" label="投稿数"></el-table-column>
-            <el-table-column prop="createdTime" min-width="150" label="创建时间"></el-table-column>
-            <el-table-column prop="expiredTime" min-width="150" label="截止日期"></el-table-column>
+            <el-table-column min-width="150" label="工种">
+              <template slot-scope="scope">
+                <span>{{ setComposers(scope.row.professionDesArray) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="sumPostNum" min-width="150" label="总推送作品数"></el-table-column>
+            <el-table-column prop="postedNum" min-width="150" label="已推送作品数"></el-table-column>
+            <el-table-column prop="leftNum" min-width="150" label="剩余推送作品数"></el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -50,37 +54,66 @@
         </el-scrollbar>
       </div>
     </div>
+    <!-- 添加作者 弹窗 -->
+    <mus-dialog
+      :title="dialogOption.title"
+      :loading="dialogOption.loading"
+      :is-show="dialogOption.show"
+      :width="'500px'"
+      @handleClose="dialogOption.show = false"
+      @handleConfirm="handleConfirm"
+    >
+      <div class="pl24 pr24 pt24 pb24">
+        <el-form ref="authorForm" :model="authorForm" :rules="rules" label-width="100px">
+          <el-row :gutter="20">
+            <el-col :span="20">
+              <el-form-item label="选择作者：" prop="authors">
+                <el-select
+                  v-model="authorForm.authors"
+                  filterable
+                  clearable
+                  multiple
+                  remote
+                  :remote-method="searchAuthorsList"
+                  :loading="authorsLoading"
+                  placeholder="请选择作者"
+                  style="width:100%;"
+                >
+                  <el-option v-for="(item,index) in authorList" :key="index" :label="item.des" :value="item.userId"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="推送数量：" prop="size">
+                <el-input-number v-model="authorForm.size" style="width:100%;" controls-position="right" :min="1" :max="999999"></el-input-number>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </mus-dialog>
   </div>
 </template>
 <script>
 import {
-  getList
-//   saveAdd,
-//   saveEdit,
+  getList,
+  queryAuthorSelect,
+  saveAuthor,
+  querySet
 //   saveDelete,
 //   getUserUnderCom
-} from '@/api/songCollection/needsLibrary/list'
+} from '@/api/songCollection/priorityPush/list'
 export default {
   name: 'List',
   components: {
   },
   data() {
     return {
-      // 选择对象
-      selectOption: {
-        // 选中数组
-        ids: [],
-        // 非单个禁用
-        single: true,
-        // 非多个禁用
-        multiple: true
-      },
       total: 0,
       loading: false,
       dataList: [],
-      userList: [], // 用户列表
       queryForm: {
-        title: '', // 需求模糊查询
+        optionalType: '', // 0词 1曲
         page: 1, // 当前页
         limit: 20 // 每页条数
       },
@@ -91,6 +124,12 @@ export default {
         loading: false
       },
       form: {},
+      authorList: [], // 作者列表
+      authorsLoading: false,
+      authorForm: {
+        authors: '',
+        size: 1
+      },
       rules: {
         baseName: [
           { required: true, message: '请输入自选库名称', trigger: 'blur' }
@@ -106,7 +145,6 @@ export default {
     getList() {
       this.loading = true
       getList(this.queryForm).then(res => {
-        console.log(this.queryForm)
         this.dataList = res.data || []
         this.total = res.count || 0
         this.loading = false
@@ -114,12 +152,21 @@ export default {
         this.loading = false
       })
     },
+    // 设置作者
+    setComposers(row) {
+      let arr = []
+      row && row.forEach(item => {
+        if (item) {
+          arr.push(item)
+        }
+      })
+      return arr.join(',')
+    },
     // 打开详情
     openDetails(row) {
       let form = {
         id: row.id,
-        optionalType: row.optionalType,
-        name: row.title
+        name: `${row.realName}(${row.stageName})`
         // createdTime: row.createdTime,
         // updateTime: row.updateTime,
         // sharingPersonNames: row.sharingPersonNames,
@@ -127,10 +174,49 @@ export default {
       }
       console.log(form, 'form')
       let json = {
-        title: row.title,
+        title: `${row.realName}(${row.stageName})`,
         form: form
       }
       this.$emit('addTab', json)
+    },
+    // 作者下拉框
+    queryAuthorSelect(val) {
+      queryAuthorSelect({ stageName: val, limit: '' }).then(res => {
+        this.authorsLoading = false
+        this.authorList = res.data || []
+        console.log(this.authorList, '--')
+      }).catch(() => {
+        this.authorsLoading = false
+      })
+    },
+    // 作者远程搜索
+    searchAuthorsList(val) {
+      this.authorsLoading = true
+      this.queryAuthorSelect(val)
+    },
+    // 打开添加作者
+    openAdd() {
+      this.queryAuthorSelect(null)
+      this.dialogOption = {
+        title: '添加作者',
+        show: true,
+        loading: false
+      }
+      this.authorForm.size = 1
+      querySet().then(res => {
+        this.authorForm.authors = res.data.authors || []
+      })
+    },
+    // 保存回调
+    handleConfirm() {
+      saveAuthor(this.authorForm).then(res => {
+        this.$notify.success({ title: '添加成功' })
+        this.getList()
+        this.dialogOption.show = false
+        this.dialogOption.loading = false
+      }).catch(e => {
+        this.dialogOption.loading = false
+      })
     }
   }
 }

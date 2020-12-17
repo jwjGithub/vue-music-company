@@ -1,10 +1,10 @@
 /*
- * @Descripttion:
+ * @Descripttion: 每日更新接口
  * @version:
  * @Author: jwj
  * @Date: 2020-12-07 21:13:18
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-11 22:56:11
+ * @LastEditTime: 2020-12-16 20:46:55
  */
 import request from '@/utils/request'
 
