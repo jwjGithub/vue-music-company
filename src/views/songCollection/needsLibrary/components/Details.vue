@@ -2,8 +2,8 @@
  * @Description:需求库详情
  * @Autor: JWJ
  * @Date: 2020-11-22 15:31:29
- * @LastEditors: JWJ
- * @LastEditTime: 2020-11-22 21:37:00
+ * @LastEditors: jwj
+ * @LastEditTime: 2020-12-18 21:48:28
 -->
 <template>
   <div class="main-page">
@@ -29,7 +29,7 @@
             <el-button type="primary" size="mini" class="ml10 mr20" :loading="loading" @click="getList">查询</el-button>
           </div>
           <div class="right pr30">
-            <el-button type="primary" size="mini" :disabled="!selectOption.multiple" @click="openAdd(2,null)">添加到自选库</el-button>
+            <el-button type="primary" size="mini" :disabled="selectOption.multiple" @click="openAdd(2,null)">添加到自选库</el-button>
           </div>
         </div>
         <div class="content">
@@ -189,31 +189,8 @@ export default {
       this.selectOption.single = selection.length !== 1
       this.selectOption.multiple = !selection.length
     },
-    // 打开删除 type:1 单个 type:2 批量
-    // openDelete(type, row) {
-    //   let title = type === 1 ? '单个' : '批量'
-    //   this.$confirm('此操作将' + title + '删除自选库歌曲, 是否继续?', '自选库歌曲删除', {
-    //     cancelButtonText: '取消',
-    //     confirmButtonText: '确定',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     let json = {
-    //       optionalId: this.form.id,
-    //       musicIds: type === 1 ? row.id : this.selectOption.ids.join(',')
-    //     }
-    //     console.log('删除')
-    //     saveDelete(json).then(res => {
-    //       this.$notify.success({
-    //         title: '操作成功'
-    //       })
-    //       this.getList()
-    //     })
-    //   }).catch(() => {
-
-    //   })
-    // },
     // 打开添加到自选库窗口
-    openAdd() {
+    openAdd(type, row) {
       this.dialogOption = {
         title: '添加到自选库',
         show: true,
@@ -224,7 +201,7 @@ export default {
         this.zxkList = res.data || []
       })
       this.listForm = {
-        worksId: this.selectOption.ids.join(),
+        worksId: type === 1 ? row.id : this.selectOption.ids.join(),
         optionalId: '',
         optionalType: this.queryForm.optionalType
       }

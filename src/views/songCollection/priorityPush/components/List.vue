@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:01:42
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-17 20:51:38
+ * @LastEditTime: 2020-12-18 19:31:58
 -->
 <template>
   <div class="main-page">
@@ -165,9 +165,9 @@ export default {
     // 打开详情
     openDetails(row) {
       let form = {
-        id: row.id,
-        name: `${row.realName}(${row.stageName})`
-        // createdTime: row.createdTime,
+        userId: row.userId,
+        name: `${row.realName}(${row.stageName})`,
+        leftNum: row.leftNum
         // updateTime: row.updateTime,
         // sharingPersonNames: row.sharingPersonNames,
         // remark: row.remark

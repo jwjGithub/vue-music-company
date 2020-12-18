@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-11 23:02:48
+ * @LastEditTime: 2020-12-18 21:49:03
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -20,6 +20,7 @@
             <el-option label="词曲" value="1"></el-option>
             <el-option label="Beat/Bgm" value="2"></el-option>
             <el-option label="作曲" value="3"></el-option>
+            <el-option label="作词" value="4"></el-option>
           </el-select>
           <el-button type="primary" size="mini" class="ml10" :loading="loading" @click="getList">查询</el-button>
           <el-button type="primary" size="mini" @click="openSetUp">设置</el-button>

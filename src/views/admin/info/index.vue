@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-11 21:35:24
+ * @LastEditTime: 2020-12-18 21:39:26
 -->
 <template>
   <div class="main-page admin-info">
@@ -45,7 +45,7 @@
                       <el-option label="私营企业" :value="5" />
                       <el-option label="合伙企业" :value="6" />
                     </el-select>
-                    <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="saveCompanyType('company')">保存</el-button>
                     <el-button type="primary" class="ml10" @click="companyNature = true">取消</el-button>
                   </span>
                   <i v-if="companyNature" class="icon icon-edit pointer" @click="editCompanyType"></i>
@@ -57,7 +57,7 @@
                   <span v-if="addressClick" class="mr12">{{ dataInfo.address }}</span>
                   <span v-else>
                     <el-input v-model="companyInfo.address" class="w20"></el-input>
-                    <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="saveCompanyType('address')">保存</el-button>
                     <el-button type="primary" class="ml10" @click="addressClick = true">取消</el-button>
                   </span>
                   <i v-if="addressClick" class="icon icon-edit pointer" @click="editAddress"></i>
@@ -69,7 +69,7 @@
                   <span v-if="urlClick" class="mr12">{{ dataInfo.url }}</span>
                   <span v-else>
                     <el-input v-model="companyInfo.url" class="w20"></el-input>
-                    <el-button type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="saveCompanyType('url')">保存</el-button>
                     <el-button type="primary" class="ml10" @click="urlClick = true">取消</el-button>
                   </span>
                   <i v-if="urlClick" class="icon icon-edit pointer ml10" @click="editUrl"></i>
@@ -96,7 +96,7 @@
                   </div>
                   <div>
                     <i v-if="introductionClick" class="icon icon-edit pointer ml10" @click="editIntroduction"></i>
-                    <el-button v-else type="primary" class="ml10" @click="saveCompanyType">保存</el-button>
+                    <el-button v-else type="primary" class="ml10" @click="saveCompanyType('introduction')">保存</el-button>
                     <el-button v-if="!introductionClick" type="primary" class="ml10" @click="introductionClick = true">取消</el-button>
                   </div>
                 </div>
@@ -201,13 +201,21 @@ export default {
       this.companyInfo.introduction = this.dataInfo.introduction
     },
     // 保存
-    saveCompanyType() {
+    saveCompanyType(type) {
       updateCompanyMessage(this.companyInfo).then(res => {
         this.$message.success('修改成功')
-        this.companyNature = true
-        this.addressClick = true
-        this.introductionClick = true
-        this.urlClick = true
+        if (type === 'company') {
+          this.companyNature = true
+        }
+        if (type === 'address') {
+          this.addressClick = true
+        }
+        if (type === 'url') {
+          this.urlClick = true
+        }
+        if (type === 'introduction') {
+          this.introductionClick = true
+        }
         this.getComInfo()
       })
     },
@@ -234,8 +242,7 @@ export default {
         formData.append('file', file)
         uploadImg(formData).then(res => {
           this.companyInfo.profileAtt = res.data.id
-          this.saveCompanyType()
-          console.log(res, '--')
+          this.saveCompanyType(null)
         })
       }
     }

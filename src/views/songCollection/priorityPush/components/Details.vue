@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:02:03
  * @LastEditors: jwj
- * @LastEditTime: 2020-12-17 21:06:56
+ * @LastEditTime: 2020-12-18 19:39:08
 -->
 <template>
   <div class="main-page">
@@ -24,6 +24,7 @@
               @change="switchLyricsMusic"
             >
             </el-switch>
+            <div class="ml50">剩余推送数作品数：{{ leftNum }}</div>
           </div>
           <div class="right pr30">
             <!-- <el-button type="primary" size="mini" :disabled="!selectOption.multiple" @click="openAdd(2,null)">添加到自选库</el-button> -->
@@ -40,17 +41,25 @@
               <el-table-column width="80" label="序号">
                 <template slot-scope="scope">{{ scope.$index + 1 }}</template>
               </el-table-column>
-              <el-table-column prop="authorName" min-width="150" label="名称"></el-table-column>
-              <el-table-column prop="sharingPersonNames" min-width="150" label="分类"></el-table-column>
-              <el-table-column prop="price" min-width="150" label="作品标签"></el-table-column>
-              <el-table-column v-if="!switchType" prop="description" min-width="150" label="曲作者"></el-table-column>
-              <el-table-column v-if="switchType" prop="description" min-width="150" label="词作者"></el-table-column>
-              <el-table-column prop="description" min-width="150" label="报价"></el-table-column>
-              <el-table-column prop="description" min-width="150" label="发布时间"></el-table-column>
-              <el-table-column prop="description" min-width="150" label="公开发布时间"></el-table-column>
+              <el-table-column prop="title" min-width="150" label="名称"></el-table-column>
+              <el-table-column prop="typeDes" min-width="150" label="分类"></el-table-column>
+              <el-table-column prop="stypeTagsDesc" min-width="150" label="作品标签"></el-table-column>
+              <el-table-column v-if="!switchType" min-width="150" label="曲作者">
+                <template slot-scope="scope">
+                  <span>{{ setComposers(scope.row.composers) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column v-if="switchType" min-width="150" label="词作者">
+                <template slot-scope="scope">
+                  <span>{{ setComposers(scope.row.lyricists) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="price" min-width="150" label="报价"></el-table-column>
+              <el-table-column prop="createdTime" min-width="150" label="发布时间"></el-table-column>
+              <el-table-column prop="postedTime" min-width="150" label="公开发布时间"></el-table-column>
               <el-table-column label="操作" fixed="right" width="180">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="text" @click="openAdd(scope.row)">添加到自选库</el-button>
+                  <el-button size="mini" type="text" @click="openAdd(scope.row, 1)">添加到自选库</el-button>
                   <el-button size="mini" type="text" @click="openReserve(scope.row)">预留</el-button>
                 </template>
               </el-table-column>
@@ -102,7 +111,8 @@
 import {
   getList,
   getOptionalList,
-  addToOptional
+  addToOptional,
+  addReservation
 } from '@/api/songCollection/priorityPush/details'
 export default {
   name: 'Details',
@@ -132,10 +142,11 @@ export default {
       dataList: [],
       zxkList: [], // 自选库列表
       title: '', // 标题
+      leftNum: '', // 剩余推送数
       switchType: false, // 需求库类型 0词true 1曲false
       queryForm: {
-        // id: '', // 需求库ID
-        optionalType: 1 // 需求库类型 0词true 1曲false
+        author: '', // 作者ID
+        optionalType: '1' // 需求库类型 0词true 1曲false
         // page: 1, // 当前页
         // limit: 10 // 每页条数
       },
@@ -156,12 +167,14 @@ export default {
   },
   created() {
     this.title = this.form.name
+    this.leftNum = this.form.leftNum
     this.getList()
   },
   methods: {
     // 查询列表
     getList() {
       this.loading = true
+      this.queryForm.author = this.form.userId
       getList(this.queryForm).then(res => {
         this.dataList = res.data || []
         this.total = res.count || 0
@@ -172,10 +185,18 @@ export default {
     },
     // 切换词曲
     switchLyricsMusic(val) {
-      console.log(val)
-      console.log(this.switchType, '开关')
-      this.queryForm.optionalType = val ? 0 : 1
+      this.queryForm.optionalType = val ? '0' : '1'
       this.getList()
+    },
+    // 设置作者
+    setComposers(row) {
+      let arr = []
+      row && row.forEach(item => {
+        if (item.name) {
+          arr.push(item.name)
+        }
+      })
+      return arr.join(',')
     },
     // 列表多选框
     // handleSelectionChange(selection) {
@@ -183,42 +204,19 @@ export default {
     //   this.selectOption.single = selection.length !== 1
     //   this.selectOption.multiple = !selection.length
     // },
-    // 打开删除 type:1 单个 type:2 批量
-    // openDelete(type, row) {
-    //   let title = type === 1 ? '单个' : '批量'
-    //   this.$confirm('此操作将' + title + '删除自选库歌曲, 是否继续?', '自选库歌曲删除', {
-    //     cancelButtonText: '取消',
-    //     confirmButtonText: '确定',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     let json = {
-    //       optionalId: this.form.id,
-    //       musicIds: type === 1 ? row.id : this.selectOption.ids.join(',')
-    //     }
-    //     console.log('删除')
-    //     saveDelete(json).then(res => {
-    //       this.$notify.success({
-    //         title: '操作成功'
-    //       })
-    //       this.getList()
-    //     })
-    //   }).catch(() => {
-
-    //   })
-    // },
     // 打开添加到自选库窗口
-    openAdd() {
+    openAdd(row, type) {
       this.dialogOption = {
         title: '添加到自选库',
         show: true,
         loading: false
       }
-      // 获取自选库下拉列表 type:0 词 type:1 曲
+      // 获取自选库下拉列表 optionalType:0 词 type:1 曲
       getOptionalList({ optionalType: this.queryForm.optionalType }).then(res => {
         this.zxkList = res.data || []
       })
       this.listForm = {
-        worksId: this.selectOption.ids.join(),
+        worksId: type === 1 ? row.id : '',
         optionalId: '',
         optionalType: this.queryForm.optionalType
       }
@@ -251,12 +249,12 @@ export default {
         confirmButtonText: '确定',
         type: 'warning'
       }).then(() => {
-        // addReservation({ worksId: row.id }).then(res => {
-        //   this.$notify.success({
-        //     title: '操作成功'
-        //   })
-        //   this.getList()
-        // })
+        addReservation({ worksId: row.id }).then(res => {
+          this.$notify.success({
+            title: '操作成功'
+          })
+          this.getList()
+        })
       }).catch(() => {})
     }
   }
