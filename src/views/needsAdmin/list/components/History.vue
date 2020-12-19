@@ -60,7 +60,7 @@
         </el-scrollbar>
       </div>
     </div>
-    <!-- 新增/修改 弹窗 -->
+    <!-- 重新发布 弹窗 -->
     <mus-dialog
       :title="dialogOption.title"
       :loading="dialogOption.loading"
@@ -82,6 +82,7 @@
                   default-time="23:59:59"
                   value-format="yyyy-MM-dd HH:mm:ss"
                   format="yyyy-MM-dd HH:mm:ss"
+                  :picker-options="pickerOptions"
                 >
                 </el-date-picker>
               </el-form-item>
@@ -135,6 +136,12 @@ export default {
         expiredTime: [
           { required: true, message: '请选择截止日期', trigger: ['blur', 'change'] }
         ]
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          // return time.getTime() < Date.now() - 8.64e7;   //禁用以前的日期，今天不禁用
+          return time.getTime() <= Date.now() // 禁用今天以及以前的日期
+        }
       }
     }
   },
