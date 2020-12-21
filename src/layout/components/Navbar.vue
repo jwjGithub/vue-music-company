@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
  * @LastEditors: JWJ
- * @LastEditTime: 2020-12-15 11:07:16
+ * @LastEditTime: 2020-12-21 13:46:18
 -->
 <template>
   <div class="navbar layout-navbar-page">
@@ -15,8 +15,8 @@
         <el-input v-model="song" placeholder="歌曲/歌单/音乐人"></el-input>
         <img src="@/assets/images/common/search.png" alt="">
       </div>
-      <div>
-        <img class="right-menu-img" src="@/assets/images/common/default-head.png" alt="">
+      <div class="right-menu-head">
+        <img class="right-menu-img" :src="$store.getters.userInfo.profileUrl || defaultHead" alt="">
       </div>
       <div class="right-user">
         <div>{{ $store.getters.userInfo.username }}</div>
@@ -54,7 +54,8 @@ export default {
   },
   data() {
     return {
-      song: ''
+      song: '',
+      defaultHead: require('@/assets/images/common/default-head.png')
     }
   },
   computed: {
@@ -132,9 +133,16 @@ export default {
         right: 23px;
       }
     }
-    .right-menu-img{
+    .right-menu-head{
+      width:54px;
+      height:54px;
       margin-top: 8px;
       margin-right: 10px;
+      .right-menu-img{
+        border-radius: 50%;
+        width:100%;
+        height:100%;
+      }
     }
     .right-user{
       display:flex;
@@ -158,14 +166,13 @@ export default {
         }
       }
     }
-
     .avatar-container {
       margin-right: 30px;
 
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
-
+        cursor: pointer;
         .user-avatar {
           cursor: pointer;
           width: 40px;

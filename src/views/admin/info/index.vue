@@ -2,8 +2,8 @@
  * @Description: 公司信息管理
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-18 21:39:26
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-12-21 14:19:03
 -->
 <template>
   <div class="main-page admin-info">
@@ -202,7 +202,11 @@ export default {
     },
     // 保存
     saveCompanyType(type) {
-      updateCompanyMessage(this.companyInfo).then(res => {
+      let json = {
+        id: this.companyInfo.id
+      }
+      json[type] = this.companyInfo[type]
+      updateCompanyMessage(json).then(res => {
         this.$message.success('修改成功')
         if (type === 'company') {
           this.companyNature = true
@@ -216,7 +220,8 @@ export default {
         if (type === 'introduction') {
           this.introductionClick = true
         }
-        this.getComInfo()
+        this.dataInfo[type] = this.companyInfo[type]
+        // this.getComInfo()
       })
     },
     // 打开附件上传
