@@ -37,7 +37,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="creatorName" min-width="120" label="创建人"></el-table-column>
-            <el-table-column prop="createdTime" min-width="150" label="创建时间"></el-table-column>
+            <el-table-column prop="updatedTime" min-width="150" label="修改时间"></el-table-column>
             <el-table-column prop="contributionNum" min-width="100" label="投稿数"></el-table-column>
             <el-table-column prop="expiredTime" min-width="150" label="截止日期"></el-table-column>
             <el-table-column label="操作" fixed="right" width="180">
@@ -82,6 +82,7 @@
                   default-time="23:59:59"
                   value-format="yyyy-MM-dd HH:mm:ss"
                   format="yyyy-MM-dd HH:mm:ss"
+                  :picker-options="pickerOptions"
                 >
                 </el-date-picker>
               </el-form-item>
@@ -135,6 +136,12 @@ export default {
         expiredTime: [
           { required: true, message: '请选择截止日期', trigger: ['blur', 'change'] }
         ]
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          // return time.getTime() < Date.now() - 8.64e7;   //禁用以前的日期，今天不禁用
+          return time.getTime() <= Date.now() // 禁用今天以及以前的日期
+        }
       }
     }
   },

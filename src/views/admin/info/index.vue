@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-12-21 14:19:03
+ * @LastEditTime: 2020-12-24 10:37:39
 -->
 <template>
   <div class="main-page admin-info">
@@ -45,7 +45,7 @@
                       <el-option label="私营企业" :value="5" />
                       <el-option label="合伙企业" :value="6" />
                     </el-select>
-                    <el-button type="primary" class="ml10" @click="saveCompanyType('company')">保存</el-button>
+                    <el-button type="primary" class="ml10" @click="saveCompanyType('companyType')">保存</el-button>
                     <el-button type="primary" class="ml10" @click="companyNature = true">取消</el-button>
                   </span>
                   <i v-if="companyNature" class="icon icon-edit pointer" @click="editCompanyType"></i>
@@ -208,7 +208,7 @@ export default {
       json[type] = this.companyInfo[type]
       updateCompanyMessage(json).then(res => {
         this.$message.success('修改成功')
-        if (type === 'company') {
+        if (type === 'companyType') {
           this.companyNature = true
         }
         if (type === 'address') {
@@ -221,7 +221,9 @@ export default {
           this.introductionClick = true
         }
         this.dataInfo[type] = this.companyInfo[type]
-        // this.getComInfo()
+        if (type === 'profileAtt') {
+          this.getComInfo()
+        }
       })
     },
     // 打开附件上传
@@ -247,7 +249,7 @@ export default {
         formData.append('file', file)
         uploadImg(formData).then(res => {
           this.companyInfo.profileAtt = res.data.id
-          this.saveCompanyType(null)
+          this.saveCompanyType('profileAtt')
         })
       }
     }

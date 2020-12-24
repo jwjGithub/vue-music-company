@@ -2,8 +2,8 @@
  * @Description: 发布需求
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-12 11:49:17
+ * @LastEditors: JWJ
+ * @LastEditTime: 2020-12-24 10:52:00
 -->
 <template>
   <div class="main-page needsAdmin-releaseNeed">
@@ -39,6 +39,7 @@
                     style="width:100%;"
                     placeholder="请选择截止时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
+                    :picker-options="pickerOptions"
                   >
                   </el-date-picker>
                 </el-form-item>
@@ -108,6 +109,12 @@ export default {
         optionalName: [
           { required: true, message: '请输入需求库名称', trigger: 'blur' }
         ]
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          // return time.getTime() < Date.now() - 8.64e7;   //禁用以前的日期，今天不禁用
+          return time.getTime() <= Date.now() // 禁用今天以及以前的日期
+        }
       },
       showAndHide: 1
     }
