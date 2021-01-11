@@ -58,7 +58,7 @@ npm run serve
 
 ```bash
 # 构建测试环境
-npm run build:stage
+npm run build:test
 
 # 构建生产环境
 npm run build:prod
