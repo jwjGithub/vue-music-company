@@ -3,8 +3,8 @@
  * @version:
  * @Author: jwj
  * @Date: 2020-12-07 21:01:42
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-18 19:31:58
+ * @LastEditors: JWJ
+ * @LastEditTime: 2021-01-12 15:15:13
 -->
 <template>
   <div class="main-page">
@@ -166,7 +166,7 @@ export default {
     openDetails(row) {
       let form = {
         userId: row.userId,
-        name: `${row.realName}(${row.stageName})`,
+        name: `${row.realName || ''}(${row.stageName})`,
         leftNum: row.leftNum
         // updateTime: row.updateTime,
         // sharingPersonNames: row.sharingPersonNames,
@@ -174,7 +174,7 @@ export default {
       }
       console.log(form, 'form')
       let json = {
-        title: `${row.realName}(${row.stageName})`,
+        title: `${row.realName || ''}(${row.stageName})`,
         form: form
       }
       this.$emit('addTab', json)

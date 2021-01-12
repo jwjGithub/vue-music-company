@@ -74,7 +74,7 @@
             </el-col>
             <el-col v-else :span="12">
               <el-form-item label="密码：">
-                <el-input v-model="form.password" style="width:100%;"></el-input>
+                <el-input v-model="form.password" placeholder="******" style="width:100%;"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">

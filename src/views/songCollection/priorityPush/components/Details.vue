@@ -3,8 +3,8 @@
  * @version:
  * @Author: jwj
  * @Date: 2020-12-07 21:02:03
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-18 19:39:08
+ * @LastEditors: JWJ
+ * @LastEditTime: 2021-01-12 15:34:22
 -->
 <template>
   <div class="main-page">
@@ -49,9 +49,14 @@
                   <span>{{ setComposers(scope.row.composers) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column v-if="switchType" min-width="150" label="词作者">
+              <el-table-column min-width="150" label="词作者">
                 <template slot-scope="scope">
                   <span>{{ setComposers(scope.row.lyricists) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column v-if="!switchType" min-width="150" label="制作人">
+                <template slot-scope="scope">
+                  <span>{{ setComposers(scope.row.producers) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="price" min-width="150" label="报价"></el-table-column>

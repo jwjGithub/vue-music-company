@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
  * @LastEditors: JWJ
- * @LastEditTime: 2020-12-24 10:52:00
+ * @LastEditTime: 2021-01-12 15:19:33
 -->
 <template>
   <div class="main-page needsAdmin-releaseNeed">
@@ -60,7 +60,7 @@
           </div>
           <div class="footer-btn mt50">
             <div class="mb20">{{ form.status == 1 ? '已保存到草稿箱！' : '恭喜发布成功！' }}</div>
-            <el-button type="primary" class="mt60" @click="Go('/needsAdmin/list')">进入需求库</el-button>
+            <el-button type="primary" class="mt60" @click="Go('/needsAdmin/list')">进入需求列表</el-button>
             <el-button type="primary" class="ml40 mt60" @click="intoNeeds">再来一条</el-button>
           </div>
         </div>
