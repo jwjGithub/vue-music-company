@@ -1,8 +1,8 @@
 /*
  * @Date: 2020-09-30 17:23:27
  * @Description:
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-07 21:05:08
+ * @LastEditors: JWJ
+ * @LastEditTime: 2021-01-28 15:18:07
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -98,12 +98,6 @@ export const constantRoutes = [
         ]
       },
       {
-        path: 'needsLibrary',
-        name: 'songCollectionNeedsLibrary',
-        component: () => import('@/views/songCollection/needsLibrary/index'),
-        meta: { title: '需求库管理' }
-      },
-      {
         path: 'reservedLibrary',
         component: () => import('@/views/songCollection/reservedLibrary/index'),
         meta: { title: '预留作品管理' },
@@ -122,6 +116,12 @@ export const constantRoutes = [
             meta: { title: '词库管理' }
           }
         ]
+      },
+      {
+        path: 'needsLibrary',
+        name: 'songCollectionNeedsLibrary',
+        component: () => import('@/views/songCollection/needsLibrary/index'),
+        meta: { title: '需求库管理' }
       },
       {
         path: 'dailyUpdate',

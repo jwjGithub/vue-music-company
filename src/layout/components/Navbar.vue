@@ -3,7 +3,7 @@
  * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
  * @LastEditors: JWJ
- * @LastEditTime: 2020-12-21 13:46:18
+ * @LastEditTime: 2021-01-28 15:15:58
 -->
 <template>
   <div class="navbar layout-navbar-page">
@@ -11,10 +11,10 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
-      <div class="right-menu-input">
+      <!-- <div class="right-menu-input">
         <el-input v-model="song" placeholder="歌曲/歌单/音乐人"></el-input>
         <img src="@/assets/images/common/search.png" alt="">
-      </div>
+      </div> -->
       <div class="right-menu-head">
         <img class="right-menu-img" :src="$store.getters.userInfo.profileUrl || defaultHead" alt="">
       </div>

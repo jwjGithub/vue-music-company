@@ -3,8 +3,8 @@
  * @version:
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-18 21:49:03
+ * @LastEditors: JWJ
+ * @LastEditTime: 2021-01-28 14:53:00
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -117,7 +117,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="作者：" prop="mobile">
-                <el-select v-model="form.author" multiple clearable placeholder="请选择作者" style="width:100%;">
+                <el-select v-model="form.author" multiple clearable filterable placeholder="请选择作者" style="width:100%;">
                   <el-option v-for="(item,index) in authorList" :key="index" :label="item.des" :value="item.userId"></el-option>
                 </el-select>
               </el-form-item>

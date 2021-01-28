@@ -213,7 +213,7 @@ export default {
       this.form = {
         id: row.id,
         status: 0,
-        expiredTime: row.expiredTime
+        expiredTime: ''
       }
       this.resetForm('form')
     },

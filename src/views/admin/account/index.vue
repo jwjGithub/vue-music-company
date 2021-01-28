@@ -2,8 +2,8 @@
  * @Description: 管理员账号管理
  * @Autor: JWJ
  * @Date: 2020-10-27 22:02:16
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-12 11:58:24
+ * @LastEditors: JWJ
+ * @LastEditTime: 2021-01-28 15:16:50
 -->
 <template>
   <div class="main-page admin-account">
@@ -29,7 +29,7 @@
             <p class="row-text">{{ dataInfo.companyName }}</p>
           </div>
           <div class="row">
-            <p class="row-title">账号</p>
+            <p class="row-title">用户名</p>
             <p class="row-text">{{ dataInfo.sysUserEntity && dataInfo.sysUserEntity.username }}</p>
           </div>
           <div class="row">
