@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
  * @LastEditors: JWJ
- * @LastEditTime: 2021-01-28 14:53:00
+ * @LastEditTime: 2021-02-01 15:59:06
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -18,9 +18,9 @@
           <el-select v-model="queryForm.type" clearable placeholder="请选择类型" style="width:100%;" size="mini">
             <el-option label="全部" value=""></el-option>
             <el-option label="词曲" value="1"></el-option>
-            <el-option label="Beat/Bgm" value="2"></el-option>
-            <el-option label="作曲" value="3"></el-option>
             <el-option label="作词" value="4"></el-option>
+            <el-option label="作曲" value="3"></el-option>
+            <el-option label="Beat/Bgm" value="2"></el-option>
           </el-select>
           <el-button type="primary" size="mini" class="ml10" :loading="loading" @click="getList">查询</el-button>
           <el-button type="primary" size="mini" @click="openSetUp">设置</el-button>

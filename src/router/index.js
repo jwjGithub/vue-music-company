@@ -2,7 +2,7 @@
  * @Date: 2020-09-30 17:23:27
  * @Description:
  * @LastEditors: JWJ
- * @LastEditTime: 2021-01-28 15:18:07
+ * @LastEditTime: 2021-02-01 16:05:14
  * @FilePath: \vue-music-company\src\router\index.js
  */
 import Vue from 'vue'
@@ -52,19 +52,19 @@ export const constantRoutes = [
         path: 'lowerAccount',
         component: () => import('@/views/admin/lowerAccount/index'),
         meta: { title: '子账号管理' },
-        redirect: '/admin/lowerAccount/infoSet',
+        redirect: '/admin/lowerAccount/role',
         children: [
-          {
-            path: 'infoSet',
-            name: 'AdminLowerAccountInfoSet',
-            component: () => import('@/views/admin/lowerAccount/infoSet/index'),
-            meta: { title: '业务人员账号管理' }
-          },
           {
             path: 'role',
             name: 'AdminLowerAccountRole',
             component: () => import('@/views/admin/lowerAccount/role/index'),
             meta: { title: '菜单权限分配' }
+          },
+          {
+            path: 'infoSet',
+            name: 'AdminLowerAccountInfoSet',
+            component: () => import('@/views/admin/lowerAccount/infoSet/index'),
+            meta: { title: '业务人员账号管理' }
           }
 
         ]
