@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:01:42
  * @LastEditors: JWJ
- * @LastEditTime: 2021-01-12 15:15:13
+ * @LastEditTime: 2021-02-02 09:58:09
 -->
 <template>
   <div class="main-page">
@@ -127,12 +127,12 @@ export default {
       authorList: [], // 作者列表
       authorsLoading: false,
       authorForm: {
-        authors: '',
+        authors: [],
         size: 1
       },
       rules: {
-        baseName: [
-          { required: true, message: '请输入自选库名称', trigger: 'blur' }
+        authors: [
+          { required: true, message: '请选择作者', trigger: ['blur', 'change'] }
         ]
       }
     }
@@ -184,7 +184,6 @@ export default {
       queryAuthorSelect({ stageName: val, limit: '' }).then(res => {
         this.authorsLoading = false
         this.authorList = res.data || []
-        console.log(this.authorList, '--')
       }).catch(() => {
         this.authorsLoading = false
       })
@@ -202,20 +201,28 @@ export default {
         show: true,
         loading: false
       }
-      this.authorForm.size = 1
-      querySet().then(res => {
-        this.authorForm.authors = res.data.authors || []
-      })
+      this.authorForm = {
+        authors: [],
+        size: 1
+      }
+      this.resetForm('authorForm')
+      // querySet().then(res => {
+      //   this.authorForm.authors = res.data.authors || []
+      // })
     },
     // 保存回调
     handleConfirm() {
-      saveAuthor(this.authorForm).then(res => {
-        this.$notify.success({ title: '添加成功' })
-        this.getList()
-        this.dialogOption.show = false
-        this.dialogOption.loading = false
-      }).catch(e => {
-        this.dialogOption.loading = false
+      this.$refs['authorForm'].validate((valid) => {
+        if (valid) {
+          saveAuthor(this.authorForm).then(res => {
+            this.$notify.success({ title: '添加成功' })
+            this.getList()
+            this.dialogOption.show = false
+            this.dialogOption.loading = false
+          }).catch(e => {
+            this.dialogOption.loading = false
+          })
+        }
       })
     }
   }
