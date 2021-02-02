@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 20:52:44
  * @LastEditors: JWJ
- * @LastEditTime: 2021-02-01 15:59:06
+ * @LastEditTime: 2021-02-02 18:03:27
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -123,12 +123,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="">
+              <el-form-item label=" " prop="andOr">
                 <p>
-                  <el-radio v-model="form.andOr" label="1">筛选包含以上任意条件的作品</el-radio>
+                  <el-radio v-model="form.andOr" :label="1">筛选包含以上任意条件的作品</el-radio>
                 </p>
                 <p>
-                  <el-radio v-model="form.andOr" label="2">筛选包含以上所以条件的作品</el-radio>
+                  <el-radio v-model="form.andOr" :label="2">筛选包含以上所以条件的作品</el-radio>
                 </p>
               </el-form-item>
             </el-col>
@@ -282,8 +282,8 @@ export default {
           priceRangeSuf: data.priceRangeSuf, // 价格区间最大值
           andOr: data.andOr// 全或一 0表示包含全部条件 1表示任意一个条件
         }
+        this.resetForm('form')
       })
-      this.resetForm('form')
     },
     // 保存每日更新设置
     handleConfirm() {
