@@ -2,8 +2,8 @@
  * @Description:需求库详情
  * @Autor: JWJ
  * @Date: 2020-11-22 15:31:29
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-18 21:48:28
+ * @LastEditors: JWJ
+ * @LastEditTime: 2021-02-04 16:13:17
 -->
 <template>
   <div class="main-page">
@@ -178,8 +178,6 @@ export default {
     },
     // 切换词曲
     switchLyricsMusic(val) {
-      console.log(val)
-      console.log(this.switchType, '开关')
       this.queryForm.optionalType = val ? 0 : 1
       this.getList()
     },

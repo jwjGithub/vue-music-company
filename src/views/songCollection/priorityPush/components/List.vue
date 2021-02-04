@@ -4,7 +4,7 @@
  * @Author: jwj
  * @Date: 2020-12-07 21:01:42
  * @LastEditors: JWJ
- * @LastEditTime: 2021-02-02 09:58:09
+ * @LastEditTime: 2021-02-04 16:52:29
 -->
 <template>
   <div class="main-page">
@@ -74,11 +74,13 @@
                   clearable
                   multiple
                   remote
-                  :remote-method="searchAuthorsList"
-                  :loading="authorsLoading"
                   placeholder="请选择作者"
                   style="width:100%;"
                 >
+                  <!--
+                   :remote-method="searchAuthorsList"
+                  :loading="authorsLoading"
+                 -->
                   <el-option v-for="(item,index) in authorList" :key="index" :label="item.des" :value="item.userId"></el-option>
                 </el-select>
               </el-form-item>
@@ -181,7 +183,7 @@ export default {
     },
     // 作者下拉框
     queryAuthorSelect(val) {
-      queryAuthorSelect({ stageName: val, limit: '' }).then(res => {
+      queryAuthorSelect({ stageName: val, limit: '999' }).then(res => {
         this.authorsLoading = false
         this.authorList = res.data || []
       }).catch(() => {
