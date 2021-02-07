@@ -3,8 +3,8 @@
  * @version:
  * @Author: jwj
  * @Date: 2020-12-04 13:29:43
- * @LastEditors: jwj
- * @LastEditTime: 2020-12-11 23:05:30
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-02-07 10:17:59
 -->
 <template>
   <div class="main-page admin-infoSet">
@@ -41,7 +41,12 @@
             </el-table-column>
             <el-table-column prop="title" min-width="150" label="名称"></el-table-column>
             <el-table-column prop="typeDes" min-width="150" label="分类"></el-table-column>
-            <el-table-column prop="emotionTagsDesc" min-width="150" label="作品标签"></el-table-column>
+            <el-table-column prop="emotionTagsDesc" min-width="150" label="作品标签">
+              <template slot-scope="scope">
+                <span v-if="scope.row.emotionTagsDescArray && scope.row.emotionTagsDescArray.length > 0">{{ scope.row.emotionTagsDescArray && scope.row.emotionTagsDescArray.join('/') }}/</span>
+                <span>{{ scope.row.stypeTagsDesc }}</span>
+              </template>
+            </el-table-column>
             <el-table-column min-width="150" label="曲作者" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{ setComposers(scope.row.composers) }}</span>

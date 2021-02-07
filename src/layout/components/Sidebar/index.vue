@@ -2,8 +2,8 @@
  * @Description:左侧导航栏
  * @Autor: JWJ
  * @Date: 2020-10-14 22:52:10
- * @LastEditors: JWJ
- * @LastEditTime: 2020-10-18 23:19:38
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-02-07 10:29:42
 -->
 <template>
   <div :class="{'has-logo':showLogo}">
@@ -12,6 +12,7 @@
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
+        :default-openeds="defaultOpeneds"
         :collapse="isCollapse"
         :background-color="variables.menuBg"
         :text-color="variables.menuText"
@@ -42,10 +43,21 @@ export default {
     // routes() {
     //   return this.$router.options.routes
     // },
+    defaultOpeneds() {
+      let routes = this.$router.options.routes
+      let arr = []
+      routes.forEach(item => {
+        if (item.path) {
+          arr.push(item.path)
+        }
+      })
+      return arr
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
+      console.log(meta, 'meta')
       if (meta.activeMenu) {
         return meta.activeMenu
       }

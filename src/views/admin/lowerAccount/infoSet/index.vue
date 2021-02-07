@@ -7,7 +7,7 @@
           <div class="title">业务人员账号管理</div>
         </div>
         <div class="right pr30">
-          <el-input v-model="queryForm.username" class="search-input w20 mr10" size="mini" placeholder="请输入账号" @keyup.enter.native="getList"></el-input>
+          <el-input v-model="queryForm.username" class="search-input w20 mr10" size="mini" placeholder="请输入用户名" @keyup.enter.native="getList"></el-input>
           <el-input v-model="queryForm.realName" class="search-input w20" size="mini" placeholder="请输入姓名" @keyup.enter.native="getList"></el-input>
           <el-button type="primary" size="mini" class="ml10 mrx45" :loading="loading" @click="getList">查询</el-button>
           <el-button type="primary" size="mini" @click="openAdd">创建</el-button>
